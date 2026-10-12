@@ -1,0 +1,237 @@
+/*
+ * ------------------------------------------------------------------------
+ * SHARED ADMIN TOKENS
+ * ------------------------------------------------------------------------
+ *
+ * This block is identical in every Dahu plugin, deliberately. The plugins
+ * are independent — each has to work with none of the others installed — so
+ * they cannot share a stylesheet, and the only way for their screens to
+ * look like one family is for each to declare the same tokens under the
+ * same names. A shop running three of them sees one interface rather than
+ * three.
+ *
+ * Values follow WordPress's own admin palette rather than inventing a
+ * brand: a plugin screen that ignores the admin it lives in reads as a
+ * foreign object, however well designed it is on its own.
+ *
+ * The `--dahu-admin-` prefix is what makes a declaration on :root safe
+ * here. Two plugins declaring it write the same values, so neither can
+ * surprise the other, and nothing outside the family can collide with it.
+ *
+ * Single source of truth: /Dev/dahu-public/UI-ADMIN-DAHU.md
+ */
+
+:root {
+	/* Surfaces */
+	--dahu-admin-surface: #fff;
+	--dahu-admin-surface-sunken: #f6f7f7;
+	--dahu-admin-border: #dcdcde;
+	--dahu-admin-border-strong: #c3c4c7;
+
+	/* Text */
+	--dahu-admin-text: #1d2327;
+	--dahu-admin-text-muted: #646970;
+
+	/* Intent */
+	--dahu-admin-accent: #2271b1;
+	--dahu-admin-accent-text: #fff;
+	--dahu-admin-success: #008a20;
+	--dahu-admin-warning: #b32d2e;
+	--dahu-admin-caution: #996800;
+	--dahu-admin-neutral: #50575e;
+
+	/* Shape */
+	--dahu-admin-radius: 4px;
+	--dahu-admin-radius-lg: 6px;
+	--dahu-admin-shadow: 0 1px 2px rgba( 0, 0, 0, .06 );
+	--dahu-admin-shadow-lg: 0 6px 20px rgba( 0, 0, 0, .16 );
+
+	/* Rhythm */
+	--dahu-admin-gap: 8px;
+	--dahu-admin-gap-lg: 14px;
+
+	/* Reading widths */
+	--dahu-admin-measure: 900px;
+	--dahu-admin-measure-wide: 1100px;
+
+	/* Motion. Short, and switched off below for anybody who asked. */
+	--dahu-admin-transition: .15s ease;
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+
+	:root {
+		--dahu-admin-transition: 0s;
+	}
+}
+
+/*
+ * ------------------------------------------------------------------------
+ * FILE CLEANUP — THE RULES SCREEN
+ * ------------------------------------------------------------------------
+ */
+
+.dahu-file-cleanup__intro {
+	max-width: var( --dahu-admin-measure );
+	color: var( --dahu-admin-text-muted );
+}
+
+/* The standing warning is the one notice on this screen that is not about
+ * what just happened, so it is held apart from the run-of-the-mill ones. */
+.dahu-file-cleanup__standing {
+	max-width: var( --dahu-admin-measure );
+	border-left-width: 4px;
+}
+
+/* A statement of state: several label/value pairs, read once on arrival. */
+.dahu-file-cleanup__status {
+	max-width: var( --dahu-admin-measure );
+	margin: var( --dahu-admin-gap-lg ) 0;
+}
+
+.dahu-file-cleanup__status th {
+	width: 14em;
+	font-weight: 600;
+}
+
+/* A rule is one object. Boxing it is what keeps six form tables in a row
+ * from reading as one very long form. */
+.dahu-file-cleanup__panel {
+	max-width: var( --dahu-admin-measure );
+	margin: var( --dahu-admin-gap-lg ) 0;
+	padding: 0 var( --dahu-admin-gap-lg ) var( --dahu-admin-gap );
+	background: var( --dahu-admin-surface );
+	border: 1px solid var( --dahu-admin-border );
+	border-radius: var( --dahu-admin-radius-lg );
+	box-shadow: var( --dahu-admin-shadow );
+}
+
+.dahu-file-cleanup__panel-header {
+	display: flex;
+	align-items: baseline;
+	gap: var( --dahu-admin-gap );
+	margin: 0 calc( -1 * var( --dahu-admin-gap-lg ) ) var( --dahu-admin-gap );
+	padding: var( --dahu-admin-gap ) var( --dahu-admin-gap-lg );
+	background: var( --dahu-admin-surface-sunken );
+	border-bottom: 1px solid var( --dahu-admin-border );
+	border-radius: var( --dahu-admin-radius-lg ) var( --dahu-admin-radius-lg ) 0 0;
+}
+
+.dahu-file-cleanup__panel-title {
+	font-size: 14px;
+	font-weight: 600;
+	color: var( --dahu-admin-text );
+}
+
+.dahu-file-cleanup__panel-state {
+	font-size: 12px;
+	font-weight: 400;
+	color: var( --dahu-admin-text-muted );
+	text-transform: uppercase;
+	letter-spacing: .04em;
+}
+
+/* Pushed to the end of the header row, so the destructive control is never
+ * the first thing the eye lands on. */
+.dahu-file-cleanup__panel-header .dahu-file-cleanup__delete {
+	margin-left: auto;
+}
+
+.dahu-file-cleanup__blockers {
+	margin: 0 0 var( --dahu-admin-gap );
+	color: var( --dahu-admin-warning );
+}
+
+.dahu-file-cleanup__blockers li {
+	margin: 0;
+}
+
+/* Doubled, because .button-link alone loses to core's own rule on equal
+ * specificity and the link renders in the accent colour. */
+.dahu-file-cleanup__delete.dahu-file-cleanup__delete {
+	color: var( --dahu-admin-warning );
+	text-decoration: none;
+}
+
+.dahu-file-cleanup__delete.dahu-file-cleanup__delete:hover,
+.dahu-file-cleanup__delete.dahu-file-cleanup__delete:focus {
+	color: var( --dahu-admin-warning );
+	text-decoration: underline;
+}
+
+.dahu-file-cleanup__delete-form {
+	display: none;
+}
+
+.dahu-file-cleanup__presets {
+	margin: var( --dahu-admin-gap ) 0;
+}
+
+.dahu-file-cleanup__preset-notes {
+	max-width: var( --dahu-admin-measure );
+	margin: var( --dahu-admin-gap ) 0 var( --dahu-admin-gap-lg );
+	color: var( --dahu-admin-text-muted );
+	font-size: 13px;
+}
+
+.dahu-file-cleanup__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --dahu-admin-gap );
+	align-items: center;
+	margin: var( --dahu-admin-gap ) 0;
+}
+
+.dahu-file-cleanup__actions form {
+	margin: 0;
+}
+
+.dahu-file-cleanup__preview {
+	margin: var( --dahu-admin-gap-lg ) 0;
+	padding-top: var( --dahu-admin-gap );
+	border-top: 1px solid var( --dahu-admin-border );
+}
+
+.dahu-file-cleanup__diagnostics,
+.dahu-file-cleanup__subfolders,
+.dahu-file-cleanup__files,
+.dahu-file-cleanup__log {
+	max-width: var( --dahu-admin-measure-wide );
+	margin-bottom: var( --dahu-admin-gap-lg );
+}
+
+.dahu-file-cleanup__subfolders {
+	max-width: var( --dahu-admin-measure );
+}
+
+/* A count that is refreshed in place, or read down a column, must not jump
+ * width from one digit to the next. The doubled class beats `.widefat th`,
+ * which is more specific than a bare class on its own. */
+.dahu-file-cleanup__num.dahu-file-cleanup__num {
+	font-variant-numeric: tabular-nums;
+}
+
+.dahu-file-cleanup__path {
+	word-break: break-all;
+}
+
+.dahu-file-cleanup__warn {
+	color: var( --dahu-admin-warning );
+}
+
+.dahu-file-cleanup__muted {
+	color: var( --dahu-admin-text-muted );
+}
+
+.dahu-file-cleanup__clear {
+	margin: var( --dahu-admin-gap ) 0 0;
+}
+
+/* Core gives :focus-visible a ring and leaves :focus to the browser. Both
+ * get it here, so a browser without :focus-visible is not left without. */
+.dahu-file-cleanup .button-link:focus,
+.dahu-file-cleanup .button-link:focus-visible {
+	box-shadow: 0 0 0 1px var( --dahu-admin-surface ), 0 0 0 3px var( --dahu-admin-accent );
+	outline: 2px solid transparent;
+	border-radius: var( --dahu-admin-radius );
+}

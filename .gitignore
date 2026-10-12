@@ -1,0 +1,27 @@
+# Jamais publié
+CLAUDE.md
+*.zip
+
+# Archives et dossiers de build
+/build/
+/dist/
+/dahu-*/
+
+# Fichiers de travail
+*.log
+*.bak
+*.orig
+.DS_Store
+Thumbs.db
+.vscode/
+*.code-workspace
+
+# Dépendances
+/vendor/
+/node_modules/
+
+# Jamais : copies de référence d'extensions tierces
+/woocommerce-*/
+/better-search-replace/
+/colissimo-*/
+/chronopost-*/
