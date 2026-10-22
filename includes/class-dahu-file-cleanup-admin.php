@@ -100,10 +100,23 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
+		// The family sheet first, and its own second: the plugin's own rules
+		// are written to sit on top of the shared components, so the order is
+		// a dependency and not a hope. One handle across the family -- the
+		// file is byte-identical everywhere, so whichever plugin loads it
+		// first serves all of them, and a shop with six of these installed
+		// downloads one copy.
+		wp_enqueue_style(
+			'dahu-ui',
+			DAHU_FILE_CLEANUP_URL . 'assets/css/dahu-ui.css',
+			array(),
+			DAHU_FILE_CLEANUP_VERSION
+		);
+
 		wp_enqueue_style(
 			'dahu-file-cleanup-admin',
 			DAHU_FILE_CLEANUP_URL . 'assets/css/admin.css',
-			array(),
+			array( 'dahu-ui' ),
 			DAHU_FILE_CLEANUP_VERSION
 		);
 	}
@@ -281,14 +294,12 @@ class Dahu_File_Cleanup_Admin {
 		$settings = Dahu_File_Cleanup_Settings::get();
 		$rules    = $settings['rules'];
 
-		echo '<div class="wrap dahu-file-cleanup">';
+		echo '<div class="wrap dahu-ui dahu-file-cleanup">';
 
-		printf( '<h1>%s</h1>', esc_html__( 'File cleanup', 'dahu-file-cleanup' ) );
-
-		printf(
-			'<p class="dahu-file-cleanup__intro">%s</p>',
-			esc_html__( 'Dahu File Cleanup deletes generated files that are older than an age you choose, in folders you list, selected by file extension. Nothing happens until you write a rule and switch it on, and the dry run below shows exactly what a rule picks before you do.', 'dahu-file-cleanup' )
-		);
+		echo '<div class="dahu-ui-head">';
+		printf( '<h1 class="dahu-ui-head__title">%s</h1>', esc_html__( 'File cleanup', 'dahu-file-cleanup' ) );
+		printf( '<p class="dahu-ui-head__sub">%s</p>', esc_html__( 'Finds uploaded files no longer attached to anything.', 'dahu-file-cleanup' ) );
+		echo '</div>';
 
 		// WordPress moves every admin notice to just after the first heading
 		// of the wrap, unless the screen says where it wants them. Without
@@ -420,7 +431,7 @@ class Dahu_File_Cleanup_Admin {
 			),
 		);
 
-		echo '<table class="widefat dahu-file-cleanup__status"><tbody>';
+		echo '<div class="dahu-ui-card"><table class="widefat dahu-file-cleanup__status"><tbody>';
 
 		foreach ( $lines as $label => $value ) {
 			printf(
@@ -430,7 +441,7 @@ class Dahu_File_Cleanup_Admin {
 			);
 		}
 
-		echo '</tbody></table>';
+		echo '</tbody></table></div>';
 	}
 
 	/**
@@ -463,7 +474,7 @@ class Dahu_File_Cleanup_Admin {
 
 		self::render_rule( $option, '__new', Dahu_File_Cleanup_Rules::blank(), true );
 
-		printf( '<h2>%s</h2>', esc_html__( 'Limits', 'dahu-file-cleanup' ) );
+		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Limits', 'dahu-file-cleanup' ) );
 
 		echo '<table class="form-table" role="presentation"><tbody>';
 
@@ -486,7 +497,7 @@ class Dahu_File_Cleanup_Admin {
 			esc_html__( 'Off by default, because uninstalling is often a step in reinstalling, and the log is the record of what this plugin deleted. Files on disk are never touched by an uninstall either way.', 'dahu-file-cleanup' )
 		);
 
-		echo '</tbody></table>';
+		echo '</tbody></table></div>';
 
 		submit_button( __( 'Save rules', 'dahu-file-cleanup' ) );
 
@@ -508,7 +519,7 @@ class Dahu_File_Cleanup_Admin {
 		$name     = sprintf( '%s[rules][%s]', $option, $key );
 		$id       = 'dahu-file-cleanup-' . sanitize_html_class( $key );
 
-		echo '<div class="dahu-file-cleanup__panel">';
+		echo '<div class="dahu-ui-card dahu-file-cleanup__panel">';
 
 		echo '<div class="dahu-file-cleanup__panel-header">';
 
@@ -654,7 +665,7 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		printf( '<h2>%s</h2>', esc_html__( 'Ready-made rules', 'dahu-file-cleanup' ) );
+		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Ready-made rules', 'dahu-file-cleanup' ) );
 
 		printf(
 			'<p class="dahu-file-cleanup__muted">%s</p>',
@@ -683,7 +694,7 @@ class Dahu_File_Cleanup_Admin {
 		echo '</select> ';
 
 		printf(
-			'<button type="submit" class="button">%s</button>',
+			'<button type="submit" class="dahu-ui-btn">%s</button>',
 			esc_html__( 'Add as a new rule', 'dahu-file-cleanup' )
 		);
 
@@ -703,7 +714,7 @@ class Dahu_File_Cleanup_Admin {
 			);
 		}
 
-		echo '</ul>';
+		echo '</ul></div>';
 	}
 
 	/**
@@ -714,7 +725,7 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_actions( $rules ) {
 
-		printf( '<h2>%s</h2>', esc_html__( 'Actions', 'dahu-file-cleanup' ) );
+		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Actions', 'dahu-file-cleanup' ) );
 
 		echo '<div class="dahu-file-cleanup__actions">';
 
@@ -722,7 +733,7 @@ class Dahu_File_Cleanup_Admin {
 		wp_nonce_field( 'dahu_file_cleanup_preview' );
 		echo '<input type="hidden" name="dahu_file_cleanup_action" value="preview">';
 		printf(
-			'<button type="submit" class="button button-primary">%s</button>',
+			'<button type="submit" class="dahu-ui-btn dahu-ui-btn--go">%s</button>',
 			esc_html__( 'Dry run — deletes nothing', 'dahu-file-cleanup' )
 		);
 		echo '</form>';
@@ -732,7 +743,7 @@ class Dahu_File_Cleanup_Admin {
 			wp_nonce_field( 'dahu_file_cleanup_run' );
 			echo '<input type="hidden" name="dahu_file_cleanup_action" value="run">';
 			printf(
-				'<button type="submit" class="button">%s</button>',
+				'<button type="submit" class="dahu-ui-btn">%s</button>',
 				esc_html__( 'Run the enabled rules now', 'dahu-file-cleanup' )
 			);
 			echo '</form>';
@@ -744,6 +755,8 @@ class Dahu_File_Cleanup_Admin {
 			'<p class="description">%s</p>',
 			esc_html__( 'The dry run covers every rule, switched on or not. Running now covers only the rules that are on and complete, exactly as the daily run does.', 'dahu-file-cleanup' )
 		);
+
+		echo '</div>';
 	}
 
 	/**
@@ -757,10 +770,11 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		printf( '<h2>%s</h2>', esc_html__( 'Dry run — nothing was deleted', 'dahu-file-cleanup' ) );
+		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Dry run — nothing was deleted', 'dahu-file-cleanup' ) );
 
 		if ( ! self::$preview ) {
 			printf( '<p class="dahu-file-cleanup__muted">%s</p>', esc_html__( 'There are no rules to run.', 'dahu-file-cleanup' ) );
+			echo '</div>';
 
 			return;
 		}
@@ -806,6 +820,8 @@ class Dahu_File_Cleanup_Admin {
 
 			echo '</div>';
 		}
+
+		echo '</div>';
 	}
 
 	/**
@@ -984,13 +1000,14 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		printf( '<h2>%s</h2>', esc_html__( 'Manual run', 'dahu-file-cleanup' ) );
+		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Manual run', 'dahu-file-cleanup' ) );
 
 		if ( isset( self::$summary['locked'] ) ) {
 			printf(
 				'<p class="dahu-file-cleanup__warn">%s</p>',
 				esc_html__( 'Another run was already in progress, so nothing was done. Try again in a few minutes.', 'dahu-file-cleanup' )
 			);
+			echo '</div>';
 
 			return;
 		}
@@ -1000,11 +1017,12 @@ class Dahu_File_Cleanup_Admin {
 				'<p class="dahu-file-cleanup__muted">%s</p>',
 				esc_html__( 'No rule is both switched on and complete, so nothing was deleted.', 'dahu-file-cleanup' )
 			);
+			echo '</div>';
 
 			return;
 		}
 
-		echo '<table class="widefat striped"><thead><tr>';
+		echo '<table class="dahu-ui-table"><thead><tr>';
 		printf( '<th scope="col">%s</th>', esc_html__( 'Rule', 'dahu-file-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Deleted', 'dahu-file-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Freed', 'dahu-file-cleanup' ) );
@@ -1035,7 +1053,7 @@ class Dahu_File_Cleanup_Admin {
 			);
 		}
 
-		echo '</tbody></table>';
+		echo '</tbody></table></div>';
 	}
 
 	/**
@@ -1048,13 +1066,14 @@ class Dahu_File_Cleanup_Admin {
 		$rows  = Dahu_File_Cleanup_Log::all();
 		$shown = array_slice( $rows, 0, 50 );
 
-		printf( '<h2>%s</h2>', esc_html__( 'Log', 'dahu-file-cleanup' ) );
+		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Log', 'dahu-file-cleanup' ) );
 
 		if ( ! $rows ) {
 			printf(
 				'<p class="dahu-file-cleanup__muted">%s</p>',
 				esc_html__( 'Nothing has run yet. A row is written for every rule on every run, including runs that deleted nothing.', 'dahu-file-cleanup' )
 			);
+			echo '</div>';
 
 			return;
 		}
@@ -1107,7 +1126,7 @@ class Dahu_File_Cleanup_Admin {
 		wp_nonce_field( 'dahu_file_cleanup_clear_log' );
 		echo '<input type="hidden" name="dahu_file_cleanup_action" value="clear-log">';
 		printf( '<button type="submit" class="button-link dahu-file-cleanup__delete">%s</button>', esc_html__( 'Clear the log', 'dahu-file-cleanup' ) );
-		echo '</form>';
+		echo '</form></div>';
 	}
 
 	/**

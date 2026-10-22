@@ -71,11 +71,6 @@
  * ------------------------------------------------------------------------
  */
 
-.dahu-file-cleanup__intro {
-	max-width: var( --dahu-admin-measure );
-	color: var( --dahu-admin-text-muted );
-}
-
 /* The standing warning is the one notice on this screen that is not about
  * what just happened, so it is held apart from the run-of-the-mill ones. */
 .dahu-file-cleanup__standing {
@@ -94,27 +89,27 @@
 	font-weight: 600;
 }
 
-/* A rule is one object. Boxing it is what keeps six form tables in a row
- * from reading as one very long form. */
-.dahu-file-cleanup__panel {
+/* Every card on this screen shares one reading width and one rhythm. */
+.dahu-file-cleanup .dahu-ui-card {
 	max-width: var( --dahu-admin-measure );
 	margin: var( --dahu-admin-gap-lg ) 0;
-	padding: 0 var( --dahu-admin-gap-lg ) var( --dahu-admin-gap );
-	background: var( --dahu-admin-surface );
-	border: 1px solid var( --dahu-admin-border );
-	border-radius: var( --dahu-admin-radius-lg );
-	box-shadow: var( --dahu-admin-shadow );
 }
 
+/* A rule is one object; the card gives it its box, and this class keeps
+ * it from being squeezed by the neighbouring rule. */
+.dahu-file-cleanup__panel {
+	position: relative;
+}
+
+/* A rule is one object, and the card is its box. Its header is a row of
+ * title, state and the delete link, kept apart from the fields by a rule. */
 .dahu-file-cleanup__panel-header {
 	display: flex;
 	align-items: baseline;
 	gap: var( --dahu-admin-gap );
-	margin: 0 calc( -1 * var( --dahu-admin-gap-lg ) ) var( --dahu-admin-gap );
-	padding: var( --dahu-admin-gap ) var( --dahu-admin-gap-lg );
-	background: var( --dahu-admin-surface-sunken );
+	margin: 0 0 var( --dahu-admin-gap-lg );
+	padding-bottom: var( --dahu-admin-gap );
 	border-bottom: 1px solid var( --dahu-admin-border );
-	border-radius: var( --dahu-admin-radius-lg ) var( --dahu-admin-radius-lg ) 0 0;
 }
 
 .dahu-file-cleanup__panel-title {
