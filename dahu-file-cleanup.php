@@ -3,7 +3,7 @@
  * Plugin Name:       Dahu File Cleanup
  * Plugin URI:        https://dahu-concept.fr
  * Description:       A retention policy for the generated files that pile up on a WordPress server: named rules with their own folders, file extensions and maximum age, a dry run that lists every file before anything is deleted, a daily scheduled run, a per-run ceiling and a log.
- * Version:           1.0.0
+ * Version:           1.1.1
  * Author:            Hugo Vial-Jaime
  * Author URI:        mailto:contact@dahu-concept.fr
  * License:           MIT
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'DAHU_FILE_CLEANUP_VERSION', '1.0.0' );
+define( 'DAHU_FILE_CLEANUP_VERSION', '1.1.1' );
 define( 'DAHU_FILE_CLEANUP_FILE', __FILE__ );
 define( 'DAHU_FILE_CLEANUP_PATH', plugin_dir_path( __FILE__ ) );
 define( 'DAHU_FILE_CLEANUP_URL', plugin_dir_url( __FILE__ ) );
@@ -190,10 +190,19 @@ add_action(
 				'file'       => DAHU_FILE_CLEANUP_FILE,
 				'version'    => DAHU_FILE_CLEANUP_VERSION,
 				'textdomain' => 'dahu-file-cleanup',
+				'mark'       => array(
+					'view'  => '0 0 112 112',
+					'paths' => array(
+						'M6 30 Q6 22 14 22 L44 22 L54 34 L92 34 Q100 34 100 42 L100 92 Q100 100 92 100 L14 100 Q6 100 6 92 Z',
+						'M30 56 L76 56',
+						'M70.0 22.0 a18.0 18.0 0 1 0 36.0 0 a18.0 18.0 0 1 0 -36.0 0',
+						'M88 12 L88 22 L96 27',
+					),
+				),
 				/*
-				 * Les mots de l'accueil viennent d'ici : le fichier partagé est
-				 * recopié dans toute la famille et ne peut donc porter aucun
-				 * domaine de traduction.
+				 * The welcome screen's words come from here: the shared file is
+				 * copied byte for byte across the whole family, so it can carry
+				 * no text domain of its own.
 				 */
 				'strings'    => array(
 					'next'   => __( 'Next', 'dahu-file-cleanup' ),

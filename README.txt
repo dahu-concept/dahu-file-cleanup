@@ -4,7 +4,7 @@ Tags: cleanup, retention, housekeeping, disk space, cron
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -142,6 +142,15 @@ No. It knows nothing about orders or products — it deletes files from folders.
 2. A dry run, with the per-folder diagnostics.
 
 == Changelog ==
+
+= 1.1.1 =
+* The two empty states, the rule list and the log, now use the shared hint styling of the family instead of a local one.
+
+= 1.1.0 =
+* The activation screen now opens on the plugin's own mark rather than its initials, and the banner carries the same drawing as a watermark.
+
+= 1.0.1 =
+* A folder the filesystem refuses in a way that raises an Error, rather than an exception, is now counted as unreadable like any other instead of ending the run in the middle of a walk.
 
 = 1.0.0 =
 * First public release.

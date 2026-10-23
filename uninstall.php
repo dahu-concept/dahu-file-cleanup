@@ -24,6 +24,18 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
  */
 function dahu_file_cleanup_uninstall_site() {
 
+	// The welcome screen's own three flags.
+	//
+	// They are interface state, not the shop's data, which is why they sit
+	// BEFORE any “remove data on uninstall” guard: whatever a shop chose to
+	// keep, a reinstall has to greet it again. `includes/dahu-welcome.php`
+	// writes them with update_option(), so they outlive the plugin unless
+	// they are deleted here — and the welcome screen and the guided tour
+	// would then stay silent for good, with nothing on screen to explain why.
+	delete_option( 'dahu_welcome_seen_dahu-file-cleanup' );
+	delete_option( 'dahu_welcome_pending_dahu-file-cleanup' );
+	delete_option( 'dahu_welcome_tour_dahu-file-cleanup' );
+
 	wp_clear_scheduled_hook( 'dahu_file_cleanup_daily' );
 	delete_transient( 'dahu_file_cleanup_running' );
 

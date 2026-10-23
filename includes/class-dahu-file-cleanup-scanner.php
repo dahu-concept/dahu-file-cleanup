@@ -103,9 +103,17 @@ class Dahu_File_Cleanup_Scanner {
 			while ( $stack ) {
 				list( $directory, $depth ) = array_pop( $stack );
 
+				// Throwable, not Exception. An unreadable directory raises
+				// an UnexpectedValueException, which is an Exception — but a
+				// folder whose name the filesystem hands back in a shape this
+				// constructor refuses raises an Error instead, and an Error
+				// escaping here would end a nightly run in the middle of a
+				// walk, leaving no diagnostic and no log line for the folders
+				// that came after it. One unreadable folder is a counter, not
+				// the end of the run.
 				try {
 					$entries = new FilesystemIterator( $directory, FilesystemIterator::SKIP_DOTS | FilesystemIterator::CURRENT_AS_FILEINFO );
-				} catch ( Exception $e ) {
+				} catch ( Throwable $e ) {
 					++$diagnostic['unreadable'];
 					continue;
 				}

@@ -463,7 +463,7 @@ class Dahu_File_Cleanup_Admin {
 
 		if ( ! $rules ) {
 			printf(
-				'<p class="dahu-file-cleanup__muted">%s</p>',
+				'<p class="dahu-ui-hint">%s</p>',
 				esc_html__( 'No rules yet, so nothing is deleted. Fill in the empty rule below, or add a ready-made one.', 'dahu-file-cleanup' )
 			);
 		}
@@ -1070,7 +1070,7 @@ class Dahu_File_Cleanup_Admin {
 
 		if ( ! $rows ) {
 			printf(
-				'<p class="dahu-file-cleanup__muted">%s</p>',
+				'<p class="dahu-ui-hint">%s</p>',
 				esc_html__( 'Nothing has run yet. A row is written for every rule on every run, including runs that deleted nothing.', 'dahu-file-cleanup' )
 			);
 			echo '</div>';
