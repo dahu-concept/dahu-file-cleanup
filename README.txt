@@ -1,5 +1,5 @@
 === Dahu File Cleanup ===
-Contributors: hugovialjaime
+Contributors: dahuconcept
 Tags: cleanup, retention, housekeeping, disk space, cron
 Requires at least: 6.0
 Tested up to: 7.1
