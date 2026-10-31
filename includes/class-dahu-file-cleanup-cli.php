@@ -108,7 +108,11 @@ class Dahu_File_Cleanup_CLI {
 		$show_files = isset( $assoc_args['files'] );
 
 		foreach ( $rules as $key => $rule ) {
-			$preview = Dahu_File_Cleanup_Scanner::preview( $rule );
+			// No work budget here. The administration page is bounded
+			// because somebody is waiting in front of it and a request has an
+			// execution limit; the command line is neither, and an operator
+			// who typed this wants the true total however long it takes.
+			$preview = Dahu_File_Cleanup_Scanner::preview( $rule, 200, 0 );
 
 			WP_CLI::log( '' );
 			WP_CLI::log( sprintf( '%s  [%s]  %s', $rule['label'], $key, $rule['enabled'] ? 'enabled' : 'disabled' ) );
@@ -198,7 +202,8 @@ class Dahu_File_Cleanup_CLI {
 			}
 
 			foreach ( $chosen as $key => $rule ) {
-				$preview = Dahu_File_Cleanup_Scanner::preview( $rule, 1 );
+				// Unbounded, for the same reason as `preview` above.
+				$preview = Dahu_File_Cleanup_Scanner::preview( $rule, 1, 0 );
 
 				WP_CLI::log( sprintf( '%s [%s]: %d file(s), %s', $rule['label'], $key, $preview['count'], size_format( $preview['bytes'] ) ) );
 			}
@@ -236,7 +241,11 @@ class Dahu_File_Cleanup_CLI {
 					$result['deleted'],
 					size_format( $result['bytes'] ),
 					$result['failed'] ? sprintf( ', %d could not be deleted', $result['failed'] ) : '',
-					$result['capped'] ? ' (ceiling reached, more remain)' : ''
+					$result['capped']
+						? ( 'work' === $result['capped_reason']
+							? ' (ceiling reached on files looked at, more remain)'
+							: ' (ceiling reached, more remain)' )
+						: ''
 				)
 			);
 		}

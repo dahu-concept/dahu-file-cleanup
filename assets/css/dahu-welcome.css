@@ -38,7 +38,7 @@
 		linear-gradient( 135deg, #ffffff 0%, var( --dui-paper ) 100% );
 	box-sizing: border-box;
 
-	/* Le filigrane est posé par rapport à ce bloc, et déborde sans élargir la page. */
+	/* The watermark is positioned against this block, and overflows it without widening the page. */
 	position: relative;
 	overflow: hidden;
 }

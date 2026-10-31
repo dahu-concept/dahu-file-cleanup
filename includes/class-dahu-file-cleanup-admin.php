@@ -485,7 +485,7 @@ class Dahu_File_Cleanup_Admin {
 			esc_attr( $option ),
 			esc_attr( (string) $settings['max_per_run'] ),
 			esc_html__( 'files', 'dahu-file-cleanup' ),
-			esc_html__( 'A run stops a rule once it has deleted this many files, and says so in the log. It is there for the day a folder is widened by one line and suddenly matches forty thousand files: a run that stops and reports is recoverable, a run that does not is not. The remainder goes on the next run.', 'dahu-file-cleanup' )
+			esc_html__( 'A run stops a rule once it has deleted this many files, and says so in the log. It also stops a rule that has looked at far more files than this without finding that many to delete, so a folder full of files none of which are old enough costs a bounded walk rather than the whole folder. It is there for the day a folder is widened by one line and suddenly matches forty thousand files: a run that stops and reports is recoverable, a run that does not is not. The remainder goes on the next run.', 'dahu-file-cleanup' )
 		);
 
 		printf(
@@ -796,17 +796,21 @@ class Dahu_File_Cleanup_Admin {
 				printf( '<p class="dahu-file-cleanup__warn">%s</p>', esc_html( $blocker ) );
 			}
 
+			// One sentence when the scan saw the whole folder, two when it
+			// stopped short — the second saying so, because a figure that is
+			// only a floor read as a total is a decision made on a false
+			// number. The wording is the scanner's, so every surface that
+			// reports a dry run says the same thing.
+			$headline = Dahu_File_Cleanup_Scanner::preview_headline( $block );
+
 			printf(
 				'<p class="dahu-file-cleanup__num"><strong>%1$s</strong></p>',
-				esc_html(
-					sprintf(
-						/* translators: 1: number of files, 2: formatted size. */
-						__( '%1$s file(s) selected, %2$s', 'dahu-file-cleanup' ),
-						number_format_i18n( $block['count'] ),
-						size_format( $block['bytes'] )
-					)
-				)
+				esc_html( array_shift( $headline ) )
 			);
+
+			foreach ( $headline as $sentence ) {
+				printf( '<p class="dahu-file-cleanup__warn">%s</p>', esc_html( $sentence ) );
+			}
 
 			self::render_diagnostics( $block['diagnostics'] );
 
@@ -926,7 +930,7 @@ class Dahu_File_Cleanup_Admin {
 		printf(
 			'<h4>%s</h4>',
 			esc_html(
-				$block['truncated']
+				( $block['truncated'] || empty( $block['complete'] ) )
 					? __( 'By subfolder, over the files listed below only', 'dahu-file-cleanup' )
 					: __( 'By subfolder', 'dahu-file-cleanup' )
 			)
@@ -1041,7 +1045,9 @@ class Dahu_File_Cleanup_Admin {
 			}
 
 			if ( $result['capped'] ) {
-				$notes[] = __( 'the ceiling was reached; the rest goes on the next run', 'dahu-file-cleanup' );
+				$notes[] = 'work' === $result['capped_reason']
+					? __( 'this rule looked at as many files as its ceiling allows without finding that many to delete, and stopped; the rest goes on the next run', 'dahu-file-cleanup' )
+					: __( 'the ceiling was reached; the rest goes on the next run', 'dahu-file-cleanup' );
 			}
 
 			printf(

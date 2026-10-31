@@ -6,583 +6,597 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"PO-Revision-Date: 2026-10-23 11:23+0000\n"
+"PO-Revision-Date: 2026-10-24 10:47+0000\n"
 "X-Generator: dahu i18n-build\n"
 
 #. translators: 1: number of files, 2: formatted size. */
-#: \includes\class-dahu-file-cleanup-admin.php:804
+#: includes/class-dahu-file-cleanup-scanner.php:390
 msgid "%1$s file(s) selected, %2$s"
 msgstr "%1$s fichier(s) retenu(s), %2$s"
 
 #. translators: 1: number of files, 2: formatted size. */
-#: \includes\class-dahu-file-cleanup-admin.php:428
+#: includes/class-dahu-file-cleanup-admin.php:428
 msgid "%1$s files deleted, %2$s freed"
 msgstr "%1$s fichiers supprimés, %2$s libérés"
 
 #. translators: 1: total rules, 2: how many would run. */
-#: \includes\class-dahu-file-cleanup-admin.php:414
+#: includes/class-dahu-file-cleanup-admin.php:414
 msgid "%1$s rule, %2$s of them ready to run"
 msgid_plural "%1$s rules, %2$s of them ready to run"
 msgstr[0] "%1$s règle, dont %2$s prête à tourner"
 msgstr[1] "%1$s règles, dont %2$s prêtes à tourner"
 
 #. translators: %s: number of files. */
-#: \includes\class-dahu-file-cleanup-admin.php:1038
+#: includes/class-dahu-file-cleanup-admin.php:1042
 msgid "%s file could not be deleted"
 msgid_plural "%s files could not be deleted"
 msgstr[0] "%s fichier n’a pas pu être supprimé"
 msgstr[1] "%s fichiers n’ont pas pu être supprimés"
 
 #. translators: %s: number of files. */
-#: \includes\class-dahu-file-cleanup-admin.php:423
+#: includes/class-dahu-file-cleanup-admin.php:423
 msgid "%s files per rule per run"
 msgstr "%s fichiers par règle et par exécution"
 
 #. translators: %s: number of symbolic links. */
-#: \includes\class-dahu-file-cleanup-admin.php:887
+#: includes/class-dahu-file-cleanup-admin.php:891
 msgid "%s link skipped"
 msgid_plural "%s links skipped"
 msgstr[0] "%s lien écarté"
 msgstr[1] "%s liens écartés"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1104
+#: includes/class-dahu-file-cleanup-admin.php:1110
 msgid "(ceiling)"
 msgstr "(plafond)"
 
-#: \includes\class-dahu-file-cleanup-admin.php:531
+#: includes/class-dahu-file-cleanup-admin.php:531
 msgid "(unnamed)"
 msgstr "(sans nom)"
 
-#: \includes\class-dahu-file-cleanup-rules.php:436
+#: includes/class-dahu-file-cleanup-rules.php:436
 msgid "A folder several plugins use for their own logs. Check what is actually in yours before enabling this: a log is also the only record of what went wrong last week."
 msgstr "Un dossier que plusieurs extensions emploient pour leurs propres journaux. Regardez ce que contient réellement le vôtre avant d’activer ceci : un journal est aussi le seul relevé de ce qui a mal tourné la semaine dernière."
 
-#: \includes\class-dahu-file-cleanup-admin.php:488
-msgid "A run stops a rule once it has deleted this many files, and says so in the log. It is there for the day a folder is widened by one line and suddenly matches forty thousand files: a run that stops and reports is recoverable, a run that does not is not. The remainder goes on the next run."
-msgstr "Une exécution arrête une règle une fois ce nombre de fichiers supprimés, et l’inscrit au journal. C’est pour le jour où un dossier est élargi d’une ligne et se met à correspondre à quarante mille fichiers : une exécution qui s’arrête et le signale est récupérable, une exécution qui ne s’arrête pas ne l’est pas. Le reste passe à l’exécution suivante."
+#: includes/class-dahu-file-cleanup-admin.php:488
+msgid "A run stops a rule once it has deleted this many files, and says so in the log. It also stops a rule that has looked at far more files than this without finding that many to delete, so a folder full of files none of which are old enough costs a bounded walk rather than the whole folder. It is there for the day a folder is widened by one line and suddenly matches forty thousand files: a run that stops and reports is recoverable, a run that does not is not. The remainder goes on the next run."
+msgstr "Une exécution arrête une règle une fois ce nombre de fichiers supprimés, et l’inscrit au journal. Elle arrête aussi une règle qui a examiné beaucoup plus de fichiers que ce nombre sans en trouver autant à supprimer : un dossier plein de fichiers dont aucun n’est assez ancien coûte alors un parcours borné et non le dossier entier. C’est pour le jour où un dossier est élargi d’une ligne et se met à correspondre à quarante mille fichiers : une exécution qui s’arrête et le signale est récupérable, une exécution qui ne s’arrête pas ne l’est pas. Le reste passe à l’exécution suivante."
 
-#: \dahu-file-cleanup.php:240
+#: dahu-file-cleanup.php:249
 msgid "A run stops after this many files, and says so in the log."
 msgstr "Une passe s'arrête après ce nombre de fichiers, et le signale dans le journal."
 
-#: \dahu-file-cleanup.php:239
+#: dahu-file-cleanup.php:248
 msgid "A safety ceiling"
 msgstr "Un plafond de sécurité"
 
-#: \includes\class-dahu-file-cleanup-admin.php:728
+#: includes/class-dahu-file-cleanup-admin.php:728
 msgid "Actions"
 msgstr "Actions"
 
-#: \includes\class-dahu-file-cleanup-admin.php:698
+#: includes/class-dahu-file-cleanup-admin.php:698
 msgid "Add as a new rule"
 msgstr "Ajouter comme nouvelle règle"
 
-#: \includes\class-dahu-file-cleanup-admin.php:496
+#: includes/class-dahu-file-cleanup-admin.php:496
 msgid "Also delete the rules and the log"
 msgstr "Supprimer aussi les règles et le journal"
 
-#: \includes\class-dahu-file-cleanup-admin.php:609
+#: includes/class-dahu-file-cleanup-admin.php:609
 msgid "Also look in subfolders"
 msgstr "Regarder aussi dans les sous-dossiers"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1008
+#: includes/class-dahu-file-cleanup-admin.php:1012
 msgid "Another run was already in progress, so nothing was done. Try again in a few minutes."
 msgstr "Une autre exécution était déjà en cours, donc rien n’a été fait. Réessayez dans quelques minutes."
 
-#: \includes\class-dahu-file-cleanup-rules.php:427
+#. translators: 1: number of files found so far, 2: formatted size. */
+#: includes/class-dahu-file-cleanup-scanner.php:400
+msgid "At least %1$s file(s) selected, at least %2$s — this is not the total."
+msgstr "Au moins %1$s fichier(s) sélectionné(s), au moins %2$s — ce n’est pas le total."
+
+#: includes/class-dahu-file-cleanup-rules.php:427
 msgid "Backups and logs left by WP Staging. Only the backups and logs folders: its working folders hold a clone being built, and a rule pointed at those would delete files it is still writing."
 msgstr "Sauvegardes et journaux laissés par WP Staging. Uniquement les dossiers backups et logs : ses dossiers de travail contiennent un clone en cours de construction, et une règle qui les viserait supprimerait des fichiers qu’il est encore en train d’écrire."
 
-#: \includes\class-dahu-file-cleanup-admin.php:931
+#: includes/class-dahu-file-cleanup-admin.php:935
 msgid "By subfolder"
 msgstr "Par sous-dossier"
 
-#: \includes\class-dahu-file-cleanup-admin.php:930
+#: includes/class-dahu-file-cleanup-admin.php:934
 msgid "By subfolder, over the files listed below only"
 msgstr "Par sous-dossier, sur les seuls fichiers listés ci-dessous"
 
-#: \includes\class-dahu-file-cleanup-admin.php:421
+#: includes/class-dahu-file-cleanup-admin.php:421
 msgid "Ceiling"
 msgstr "Plafond"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1128
+#: includes/class-dahu-file-cleanup-admin.php:1134
 msgid "Clear the log"
 msgstr "Vider le journal"
 
-#: \includes\class-dahu-file-cleanup-admin.php:597
+#: includes/class-dahu-file-cleanup-admin.php:597
 msgid "Delete files older than"
 msgstr "Supprimer les fichiers plus vieux que"
 
-#: \includes\class-dahu-file-cleanup-admin.php:548
+#: includes/class-dahu-file-cleanup-admin.php:548
 msgid "Delete rule"
 msgstr "Supprimer la règle"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1027 \includes\class-dahu-file-cleanup-admin.php:1091
+#: includes/class-dahu-file-cleanup-admin.php:1031 includes/class-dahu-file-cleanup-admin.php:1097
 msgid "Deleted"
 msgstr "Supprimés"
 
-#: \includes\class-dahu-file-cleanup-admin.php:375
+#: includes/class-dahu-file-cleanup-admin.php:375
 msgid "Deleted files are gone."
 msgstr "Un fichier supprimé est perdu."
 
-#: \dahu-file-cleanup.php:216
+#: dahu-file-cleanup.php:225
 msgid "Deletion is yours, file by file."
 msgstr "La suppression vous revient, fichier par fichier."
 
-#: \dahu-file-cleanup.php:200
+#: dahu-file-cleanup.php:209
 msgid "Done"
 msgstr "Terminé"
 
-#: \includes\class-dahu-file-cleanup-admin.php:737
+#: includes/class-dahu-file-cleanup-admin.php:737
 msgid "Dry run — deletes nothing"
 msgstr "Aperçu — ne supprime rien"
 
-#: \includes\class-dahu-file-cleanup-admin.php:773
+#: includes/class-dahu-file-cleanup-admin.php:773
 msgid "Dry run — nothing was deleted"
 msgstr "Aperçu — rien n’a été supprimé"
 
-#: \dahu-file-cleanup.php:212
+#: dahu-file-cleanup.php:221
 msgid "Each file says why it is thought to be unused."
 msgstr "Chaque fichier dit pourquoi il est considéré comme inutilisé."
 
-#: \includes\class-dahu-file-cleanup-admin.php:615
+#: includes/class-dahu-file-cleanup-admin.php:615
 msgid "Enabled"
 msgstr "Activée"
 
 #. translators: 1: file extension, 2: reason it was refused. */
-#: \includes\class-dahu-file-cleanup-settings.php:331
+#: includes/class-dahu-file-cleanup-settings.php:331
 msgid "Extension “%1$s” was not kept: %2$s"
 msgstr "L’extension « %1$s » n’a pas été retenue : %2$s"
 
-#: \includes\class-dahu-file-cleanup-admin.php:962
+#: includes/class-dahu-file-cleanup-admin.php:966
 msgid "File"
 msgstr "Fichier"
 
-#: \dahu-file-cleanup.php:188 \includes\class-dahu-file-cleanup-admin.php:83 \includes\class-dahu-file-cleanup-admin.php:84 \includes\class-dahu-file-cleanup-admin.php:300
+#: dahu-file-cleanup.php:188 includes/class-dahu-file-cleanup-admin.php:83 includes/class-dahu-file-cleanup-admin.php:84 includes/class-dahu-file-cleanup-admin.php:300
 msgid "File cleanup"
 msgstr "Nettoyage de fichiers"
 
-#: \includes\class-dahu-file-cleanup-admin.php:587
+#: includes/class-dahu-file-cleanup-admin.php:587
 msgid "File extensions"
 msgstr "Extensions de fichier"
 
-#: \includes\class-dahu-file-cleanup-admin.php:852 \includes\class-dahu-file-cleanup-admin.php:937
+#: includes/class-dahu-file-cleanup-admin.php:856 includes/class-dahu-file-cleanup-admin.php:941
 msgid "Files"
 msgstr "Fichiers"
 
-#: \includes\class-dahu-file-cleanup-admin.php:483
+#: includes/class-dahu-file-cleanup-admin.php:483
 msgid "Files per rule per run"
 msgstr "Fichiers par règle et par exécution"
 
-#: \dahu-file-cleanup.php:189 \includes\class-dahu-file-cleanup-admin.php:301
+#: dahu-file-cleanup.php:189 includes/class-dahu-file-cleanup-admin.php:301
 msgid "Finds uploaded files no longer attached to anything."
 msgstr "Trouve les fichiers envoyés qui ne sont plus rattachés à rien."
 
-#: \includes\class-dahu-file-cleanup-admin.php:850
+#: includes/class-dahu-file-cleanup-admin.php:854
 msgid "Folder as typed"
 msgstr "Dossier saisi"
 
-#: \includes\class-dahu-file-cleanup-admin.php:578
+#: includes/class-dahu-file-cleanup-admin.php:578
 msgid "Folders"
 msgstr "Dossiers"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1028 \includes\class-dahu-file-cleanup-admin.php:1092
+#: includes/class-dahu-file-cleanup-admin.php:1032 includes/class-dahu-file-cleanup-admin.php:1098
 msgid "Freed"
 msgstr "Libéré"
 
-#: \dahu-file-cleanup.php:152
+#: dahu-file-cleanup.php:152
 msgid "Hugo Vial-Jaime — Dahu-Concept"
 msgstr "Hugo Vial-Jaime — Dahu-Concept"
 
-#: \includes\class-dahu-file-cleanup-admin.php:426
+#: includes/class-dahu-file-cleanup-admin.php:426
 msgid "In the log"
 msgstr "Au journal"
 
-#: \includes\class-dahu-file-cleanup-admin.php:618
+#: includes/class-dahu-file-cleanup-admin.php:618
 msgid "Include this rule in the daily run"
 msgstr "Inclure cette règle dans l’exécution quotidienne"
 
-#: \includes\class-dahu-file-cleanup-rules.php:403
+#: includes/class-dahu-file-cleanup-rules.php:403
 msgid "Invoice and packing-slip PDFs"
 msgstr "Factures et bons de livraison PDF"
 
-#: \dahu-file-cleanup.php:211
+#: dahu-file-cleanup.php:220
 msgid "It explains"
 msgstr "Elle explique"
 
-#: \dahu-file-cleanup.php:207
+#: dahu-file-cleanup.php:216
 msgid "It looks first"
 msgstr "Elle regarde d’abord"
 
-#: \includes\class-dahu-file-cleanup-admin.php:964
+#: includes/class-dahu-file-cleanup-admin.php:968
 msgid "Last modified"
 msgstr "Dernière modification"
 
-#: \includes\class-dahu-file-cleanup-admin.php:477
+#: includes/class-dahu-file-cleanup-admin.php:477
 msgid "Limits"
 msgstr "Limites"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1069
+#: includes/class-dahu-file-cleanup-admin.php:1075
 msgid "Log"
 msgstr "Journal"
 
-#: \dahu-file-cleanup.php:244
+#: dahu-file-cleanup.php:253
 msgid "Look before deleting"
 msgstr "Regardez avant de supprimer"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1003
+#: includes/class-dahu-file-cleanup-admin.php:1007
 msgid "Manual run"
 msgstr "Exécution manuelle"
 
-#: \includes\class-dahu-file-cleanup-admin.php:601
+#: includes/class-dahu-file-cleanup-admin.php:601
 msgid "Measured on the file modification time. Leave it empty and the rule cannot be switched on: an empty field is not a way of saying zero."
 msgstr "Mesuré sur la date de modification du fichier. Laissé vide, la règle ne peut pas être activée : un champ vide n’est pas une façon de dire zéro."
 
-#: \includes\class-dahu-file-cleanup-admin.php:569
+#: includes/class-dahu-file-cleanup-admin.php:569
 msgid "Name"
 msgstr "Nom"
 
-#: \dahu-file-cleanup.php:234
+#: dahu-file-cleanup.php:243
 msgid "Name the folders"
 msgstr "Nommez les dossiers"
 
-#: \includes\class-dahu-file-cleanup-admin.php:530
+#: includes/class-dahu-file-cleanup-admin.php:530
 msgid "New rule"
 msgstr "Nouvelle règle"
 
-#: \includes\class-dahu-file-cleanup-admin.php:855
+#: includes/class-dahu-file-cleanup-admin.php:859
 msgid "Newest"
 msgstr "Plus récent"
 
-#: \dahu-file-cleanup.php:199
+#: dahu-file-cleanup.php:208
 msgid "Next"
 msgstr "Suivant"
 
-#: \includes\class-dahu-file-cleanup-admin.php:418
+#: includes/class-dahu-file-cleanup-admin.php:418
 msgid "Next scheduled run"
 msgstr "Prochaine exécution programmée"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1018
+#: includes/class-dahu-file-cleanup-admin.php:1022
 msgid "No rule is both switched on and complete, so nothing was deleted."
 msgstr "Aucune règle n’est à la fois active et complète, donc rien n’a été supprimé."
 
-#: \includes\class-dahu-file-cleanup-admin.php:467
+#: includes/class-dahu-file-cleanup-admin.php:467
 msgid "No rules yet, so nothing is deleted. Fill in the empty rule below, or add a ready-made one."
 msgstr "Aucune règle pour l’instant, donc rien n’est supprimé. Remplissez la règle vide ci-dessous, ou ajoutez-en une prête à l’emploi."
 
-#: \includes\class-dahu-file-cleanup-admin.php:1029
+#: includes/class-dahu-file-cleanup-admin.php:1033
 msgid "Notes"
 msgstr "Remarques"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1074
+#: includes/class-dahu-file-cleanup-admin.php:1080
 msgid "Nothing has run yet. A row is written for every rule on every run, including runs that deleted nothing."
 msgstr "Rien n’a encore tourné. Une ligne est écrite pour chaque règle à chaque exécution, y compris les exécutions qui n’ont rien supprimé."
 
-#: \dahu-file-cleanup.php:208
+#: dahu-file-cleanup.php:217
 msgid "Nothing is removed until you have seen the list."
 msgstr "Rien n’est supprimé avant que vous ayez vu la liste."
 
-#: \includes\class-dahu-file-cleanup-admin.php:497
+#: includes/class-dahu-file-cleanup-admin.php:497
 msgid "Off by default, because uninstalling is often a step in reinstalling, and the log is the record of what this plugin deleted. Files on disk are never touched by an uninstall either way."
 msgstr "Désactivé par défaut, parce qu’une désinstallation est souvent une étape d’une réinstallation, et que le journal est le relevé de ce que cette extension a supprimé. Dans les deux cas, aucun fichier du disque n’est touché par une désinstallation."
 
-#: \includes\class-dahu-file-cleanup-admin.php:610
+#: includes/class-dahu-file-cleanup-admin.php:610
 msgid "Off means the listed folders only. Symbolic links are never followed, in either mode, and never deleted."
 msgstr "Décoché, seuls les dossiers listés sont parcourus. Les liens symboliques ne sont jamais suivis, dans les deux modes, et jamais supprimés."
 
-#: \includes\class-dahu-file-cleanup-admin.php:854
+#: includes/class-dahu-file-cleanup-admin.php:858
 msgid "Oldest"
 msgstr "Plus ancien"
 
-#: \includes\class-dahu-file-cleanup-admin.php:493
+#: includes/class-dahu-file-cleanup-admin.php:493
 msgid "On uninstall"
 msgstr "À la désinstallation"
 
-#: \includes\class-dahu-file-cleanup-admin.php:581
+#: includes/class-dahu-file-cleanup-admin.php:581
 msgid "One per line, relative to the WordPress root. No wildcards. The root folders of the site, the uploads root, and anything inside the plugin, theme, language or update folders are refused — point at a specific subfolder."
 msgstr "Un par ligne, relatif à la racine WordPress. Pas de jokers. Les dossiers structurels du site, la racine d’uploads, et tout ce qui se trouve dans les dossiers d’extensions, de thèmes, de langues ou de mise à jour sont refusés — visez un sous-dossier précis."
 
-#: \dahu-file-cleanup.php:235
+#: dahu-file-cleanup.php:244
 msgid "One per line. Only the folders you list are ever looked at."
 msgstr "Un par ligne. Seuls les dossiers listés ici sont examinés."
 
-#: \includes\class-dahu-file-cleanup-rules.php:412
+#: includes/class-dahu-file-cleanup-rules.php:412
 msgid "Quote PDFs"
 msgstr "Devis PDF"
 
-#: \includes\class-dahu-file-cleanup-admin.php:668
+#: includes/class-dahu-file-cleanup-admin.php:668
 msgid "Ready-made rules"
 msgstr "Règles prêtes à l’emploi"
 
-#: \includes\class-dahu-file-cleanup-admin.php:851
+#: includes/class-dahu-file-cleanup-admin.php:855
 msgid "Resolved to"
 msgstr "Résolu en"
 
-#: \includes\class-dahu-file-cleanup-admin.php:853
+#: includes/class-dahu-file-cleanup-admin.php:857
 msgid "Right extension"
 msgstr "Bonne extension"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1026 \includes\class-dahu-file-cleanup-admin.php:1090
+#: includes/class-dahu-file-cleanup-admin.php:1030 includes/class-dahu-file-cleanup-admin.php:1096
 msgid "Rule"
 msgstr "Règle"
 
-#: \includes\class-dahu-file-cleanup-admin.php:345
+#: includes/class-dahu-file-cleanup-admin.php:345
 msgid "Rule added, switched off. Check its folders with the dry run, set a retention, then enable it."
 msgstr "Règle ajoutée, désactivée. Vérifiez ses dossiers avec l’aperçu, fixez une rétention, puis activez-la."
 
-#: \includes\class-dahu-file-cleanup-admin.php:343
+#: includes/class-dahu-file-cleanup-admin.php:343
 msgid "Rule deleted. No files were touched: deleting a rule only removes the rule."
 msgstr "Règle supprimée. Aucun fichier n’a été touché : supprimer une règle ne supprime que la règle."
 
-#: \dahu-file-cleanup.php:132 \includes\class-dahu-file-cleanup-admin.php:412 \includes\class-dahu-file-cleanup-admin.php:462
+#: dahu-file-cleanup.php:132 includes/class-dahu-file-cleanup-admin.php:412 includes/class-dahu-file-cleanup-admin.php:462
 msgid "Rules"
 msgstr "Règles"
 
-#: \includes\class-dahu-file-cleanup-admin.php:747
+#: includes/class-dahu-file-cleanup-admin.php:747
 msgid "Run the enabled rules now"
 msgstr "Lancer les règles actives maintenant"
 
-#: \includes\class-dahu-file-cleanup-admin.php:502
+#: includes/class-dahu-file-cleanup-admin.php:502
 msgid "Save rules"
 msgstr "Enregistrer les règles"
 
-#: \includes\class-dahu-file-cleanup-admin.php:856
+#: includes/class-dahu-file-cleanup-admin.php:860
 msgid "Selected"
 msgstr "Retenus"
 
-#: \includes\class-dahu-file-cleanup-admin.php:591
+#: includes/class-dahu-file-cleanup-admin.php:591
 msgid "Separated by commas. This is the whole of the selection — a rule with no extensions matches nothing, and there is no way to say \"everything\". Code, stylesheet, configuration and translation extensions are refused."
 msgstr "Séparées par des virgules. C’est toute la sélection : une règle sans extension ne retient rien, et il n’existe aucune façon de dire « tout ». Les extensions de code, de feuille de style, de configuration et de traduction sont refusées."
 
 #. translators: 1: rows shown, 2: rows kept in total. */
-#: \includes\class-dahu-file-cleanup-admin.php:1117
+#: includes/class-dahu-file-cleanup-admin.php:1123
 msgid "Showing the %1$s most recent of %2$s rows kept."
 msgstr "Affichage des %1$s lignes les plus récentes sur %2$s conservées."
 
-#: \includes\class-dahu-file-cleanup-admin.php:572
+#: includes/class-dahu-file-cleanup-admin.php:572
 msgid "Shown in the log and on this screen. Renaming a rule keeps its history: the name is a label, not the identifier."
 msgstr "Affiché au journal et sur cet écran. Renommer une règle conserve son historique : le nom est une étiquette, pas l’identifiant."
 
-#: \includes\class-dahu-file-cleanup-admin.php:938 \includes\class-dahu-file-cleanup-admin.php:963
+#: includes/class-dahu-file-cleanup-admin.php:942 includes/class-dahu-file-cleanup-admin.php:967
 msgid "Size"
 msgstr "Taille"
 
-#: \dahu-file-cleanup.php:201
+#: dahu-file-cleanup.php:210
 msgid "Skip"
 msgstr "Passer"
 
-#: \includes\class-dahu-file-cleanup-rules.php:421
+#: includes/class-dahu-file-cleanup-rules.php:421
 msgid "Staging backups and logs"
 msgstr "Sauvegardes et journaux de préproduction"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1089
+#: includes/class-dahu-file-cleanup-admin.php:1095
 msgid "Started by"
 msgstr "Lancée par"
 
-#: \includes\class-dahu-file-cleanup-admin.php:936
+#: includes/class-dahu-file-cleanup-admin.php:940
 msgid "Subfolder"
 msgstr "Sous-dossier"
 
-#: \includes\class-dahu-file-cleanup-admin.php:606
+#: includes/class-dahu-file-cleanup-admin.php:606
 msgid "Subfolders"
 msgstr "Sous-dossiers"
 
-#: \includes\class-dahu-file-cleanup-admin.php:346
+#: includes/class-dahu-file-cleanup-admin.php:346
 msgid "That ready-made rule is not available."
 msgstr "Cette règle prête à l’emploi n’est pas disponible."
 
-#: \includes\class-dahu-file-cleanup-admin.php:344
+#: includes/class-dahu-file-cleanup-admin.php:344
 msgid "That rule no longer exists."
 msgstr "Cette règle n’existe plus."
 
-#: \includes\class-dahu-file-cleanup-admin.php:394
+#: includes/class-dahu-file-cleanup-admin.php:394
 msgid "The daily run only happens if a real server cron calls wp-cron.php. If it does not, use the button below, or put this command on a schedule:"
 msgstr "L’exécution quotidienne n’a lieu que si un vrai cron serveur appelle wp-cron.php. Sinon, servez-vous du bouton ci-dessous, ou mettez cette commande sur une planification :"
 
-#: \includes\class-dahu-file-cleanup-admin.php:672
+#: includes/class-dahu-file-cleanup-admin.php:672
 msgid "The default folders of plugins known to leave files behind. Added switched off, with the folder editable: a site that moved the folder, or does not have that plugin, sees the dry run say so."
 msgstr "Les dossiers par défaut d’extensions connues pour laisser des fichiers derrière elles. Ajoutées désactivées, avec le dossier modifiable : un site qui a déplacé le dossier, ou qui n’a pas cette extension, le voit dire par l’aperçu."
 
-#: \includes\class-dahu-file-cleanup-admin.php:756
+#: includes/class-dahu-file-cleanup-admin.php:756
 msgid "The dry run covers every rule, switched on or not. Running now covers only the rules that are on and complete, exactly as the daily run does."
 msgstr "L’aperçu couvre toutes les règles, actives ou non. Lancer maintenant ne couvre que les règles actives et complètes, exactement comme l’exécution quotidienne."
 
-#: \dahu-file-cleanup.php:245
+#: dahu-file-cleanup.php:254
 msgid "The dry run lists what a rule would remove, and removes nothing."
 msgstr "La passe à blanc liste ce qu'une règle supprimerait, sans rien supprimer."
 
-#: \includes\class-dahu-file-cleanup-admin.php:776
+#. translators: %s: number of directory entries inspected. */
+#: includes/class-dahu-file-cleanup-scanner.php:406
+msgid "The scan stopped after looking at %s items, so it has not seen the whole folder and the real figures are higher. Narrow the rule to a smaller folder to get a complete count."
+msgstr "Le balayage s’est arrêté après %s entrées : il n’a pas vu tout le dossier, et les chiffres réels sont plus élevés. Restreignez la règle à un dossier plus petit pour obtenir un compte complet."
+
+#: includes/class-dahu-file-cleanup-admin.php:776
 msgid "There are no rules to run."
 msgstr "Il n’y a aucune règle à exécuter."
 
-#: \includes\class-dahu-file-cleanup-admin.php:376
+#: includes/class-dahu-file-cleanup-admin.php:376
 msgid "There is no undo and no trash. Generated files are often business records as well: invoices, delivery notes, quotes and accounting exports have minimum retention periods in most countries, and a backup archive is sometimes the only copy of something. Use the dry run, and set a retention you can defend."
 msgstr "Il n’y a pas d’annulation et pas de corbeille. Un fichier généré est souvent aussi une pièce : factures, bons de livraison, devis et exports comptables ont une durée de conservation minimale dans la plupart des pays, et une archive de sauvegarde est parfois la seule copie de quelque chose. Servez-vous de l’aperçu, et fixez une rétention que vous pouvez défendre."
 
-#: \includes\class-dahu-file-cleanup-admin.php:1084
+#: includes/class-dahu-file-cleanup-admin.php:1090
 msgid "WP-CLI"
 msgstr "WP-CLI"
 
-#: \includes\class-dahu-file-cleanup-admin.php:393
+#: includes/class-dahu-file-cleanup-admin.php:393
 msgid "WP-Cron is disabled on this site."
 msgstr "WP-Cron est désactivé sur ce site."
 
-#: \includes\class-dahu-file-cleanup-admin.php:1088
+#: includes/class-dahu-file-cleanup-admin.php:1094
 msgid "When"
 msgstr "Quand"
 
-#: \includes\class-dahu-file-cleanup-rules.php:430
+#: includes/class-dahu-file-cleanup-rules.php:430
 msgid "WordPress debug logs"
 msgstr "Journaux de débogage WordPress"
 
-#: \includes\class-dahu-file-cleanup-admin.php:907
+#: includes/class-dahu-file-cleanup-admin.php:911
 msgid "Worth a look: plenty of files carry an extension this rule selects, and not one of them is old enough. If that folder is supposed to hold old files, their modification times have probably been reset by a clone or a restore of this environment — in which case no retention can find anything old here, however old the files really are elsewhere."
 msgstr "À vérifier : beaucoup de fichiers portent une extension que cette règle retient, et aucun n’est assez ancien. Si ce dossier est censé contenir des fichiers anciens, leurs dates de modification ont probablement été réinitialisées par un clonage ou une restauration de cet environnement — auquel cas aucune rétention ne peut rien trouver d’ancien ici, quel que soit l’âge réel des fichiers ailleurs."
 
-#: \includes\class-dahu-file-cleanup-rules.php:409
+#: includes/class-dahu-file-cleanup-rules.php:409
 msgid "Written by PDF Invoices & Packing Slips for WooCommerce. These are accounting records: in several countries they must be kept for years, so this rule arrives with no retention and cannot run until you set one."
 msgstr "Écrits par PDF Invoices & Packing Slips for WooCommerce. Ce sont des pièces comptables : dans plusieurs pays, elles doivent être conservées des années, donc cette règle arrive sans rétention et ne peut pas tourner avant que vous en fixiez une."
 
-#: \includes\class-dahu-file-cleanup-rules.php:418
+#: includes/class-dahu-file-cleanup-rules.php:418
 msgid "Written by YITH Request a Quote, in year and month subfolders — hence the recursive scan. A quote that became an order is part of that order's history."
 msgstr "Écrits par YITH Request a Quote, dans des sous-dossiers par année et par mois — d’où le scan récursif. Un devis devenu commande fait partie de l’historique de cette commande."
 
-#: \includes\class-dahu-file-cleanup-admin.php:202 \includes\class-dahu-file-cleanup-admin.php:237
+#: includes/class-dahu-file-cleanup-admin.php:202 includes/class-dahu-file-cleanup-admin.php:237
 msgid "You are not allowed to change these rules."
 msgstr "Vous n’avez pas l’autorisation de modifier ces règles."
 
-#: \dahu-file-cleanup.php:203
+#: dahu-file-cleanup.php:212
 msgid "You are not allowed to view this page."
 msgstr "Vous n’avez pas l’autorisation de voir cette page."
 
-#: \dahu-file-cleanup.php:215
+#: dahu-file-cleanup.php:224
 msgid "You choose"
 msgstr "Vous choisissez"
 
 #. translators: %d: maximum number of extensions per rule. */
-#: \includes\class-dahu-file-cleanup-rules.php:285
+#: includes/class-dahu-file-cleanup-rules.php:285
 msgid "a rule lists at most %d extensions"
 msgstr "une règle liste au plus %d extensions"
 
-#: \includes\class-dahu-file-cleanup-rules.php:274
+#: includes/class-dahu-file-cleanup-rules.php:274
 msgid "code, configuration and translation files are never deleted by this plugin"
 msgstr "cette extension ne supprime jamais de fichiers de code, de configuration ni de traduction"
 
-#: \includes\class-dahu-file-cleanup-admin.php:600
+#: includes/class-dahu-file-cleanup-admin.php:600
 msgid "days"
 msgstr "jours"
 
-#: \includes\class-dahu-file-cleanup-paths.php:45
+#: includes/class-dahu-file-cleanup-paths.php:45
 msgid "empty path"
 msgstr "chemin vide"
 
-#: \includes\class-dahu-file-cleanup-admin.php:487
+#: includes/class-dahu-file-cleanup-admin.php:487
 msgid "files"
 msgstr "fichiers"
 
-#: \includes\class-dahu-file-cleanup-admin.php:540
+#: includes/class-dahu-file-cleanup-admin.php:540
 msgid "incomplete"
 msgstr "incomplète"
 
-#: \includes\class-dahu-file-cleanup-admin.php:790
+#: includes/class-dahu-file-cleanup-admin.php:790
 msgid "incomplete — would not run"
 msgstr "incomplète — ne tournerait pas"
 
-#: \includes\class-dahu-file-cleanup-rules.php:264
+#: includes/class-dahu-file-cleanup-rules.php:264
 msgid "letters and digits only"
 msgstr "lettres et chiffres seulement"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1083
+#: includes/class-dahu-file-cleanup-admin.php:1089
 msgid "manual"
 msgstr "manuelle"
 
-#: \includes\class-dahu-file-cleanup-rules.php:344
+#: includes/class-dahu-file-cleanup-rules.php:344
 msgid "no file extension is listed, so the rule would select nothing"
 msgstr "aucune extension n’est listée, la règle ne retiendrait donc rien"
 
-#: \includes\class-dahu-file-cleanup-rules.php:340
+#: includes/class-dahu-file-cleanup-rules.php:340
 msgid "no folder is listed"
 msgstr "aucun dossier n’est listé"
 
-#: \includes\class-dahu-file-cleanup-rules.php:348
+#: includes/class-dahu-file-cleanup-rules.php:348
 msgid "no retention in days is set"
 msgstr "aucune rétention en jours n’est définie"
 
-#: \includes\class-dahu-file-cleanup-paths.php:69
+#: includes/class-dahu-file-cleanup-paths.php:69
 msgid "no such folder on this server"
 msgstr "ce dossier n’existe pas sur ce serveur"
 
-#: \includes\class-dahu-file-cleanup-admin.php:420
+#: includes/class-dahu-file-cleanup-admin.php:420
 msgid "not scheduled — it will be rescheduled on the next admin page load"
 msgstr "non programmée — elle le sera au prochain chargement de l’administration"
 
-#: \includes\class-dahu-file-cleanup-scanner.php:96
+#: includes/class-dahu-file-cleanup-scanner.php:153
 msgid "not walked: the ceiling for this run was reached first"
 msgstr "non parcouru : le plafond de cette exécution a été atteint avant"
 
-#: \dahu-file-cleanup.php:202
+#: dahu-file-cleanup.php:211
 msgid "of"
 msgstr "sur"
 
-#: \includes\class-dahu-file-cleanup-admin.php:541
+#: includes/class-dahu-file-cleanup-admin.php:541
 msgid "off"
 msgstr "inactive"
 
-#: \includes\class-dahu-file-cleanup-admin.php:791
+#: includes/class-dahu-file-cleanup-admin.php:791
 msgid "off — would not run"
 msgstr "inactive — ne tournerait pas"
 
-#: \includes\class-dahu-file-cleanup-admin.php:541 \includes\class-dahu-file-cleanup-admin.php:791
+#: includes/class-dahu-file-cleanup-admin.php:541 includes/class-dahu-file-cleanup-admin.php:791
 msgid "on"
 msgstr "active"
 
-#: \includes\class-dahu-file-cleanup-admin.php:590
+#: includes/class-dahu-file-cleanup-admin.php:590
 msgid "pdf, zip, log"
 msgstr "pdf, zip, log"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1082
+#: includes/class-dahu-file-cleanup-admin.php:1088
 msgid "scheduled"
 msgstr "planification"
 
-#: \includes\class-dahu-file-cleanup-paths.php:115
+#: includes/class-dahu-file-cleanup-paths.php:115
 msgid "that is a structural folder of the site (the WordPress root, wp-content or the uploads root): target a specific subfolder instead"
 msgstr "c’est un dossier structurel du site (la racine WordPress, wp-content ou la racine d’uploads) : visez plutôt un sous-dossier précis"
 
 #. translators: %s: name of a WordPress directory, e.g. "plugins". */
-#: \includes\class-dahu-file-cleanup-paths.php:105
+#: includes/class-dahu-file-cleanup-paths.php:105
 msgid "that path is inside the %s folder, which this plugin never deletes from"
 msgstr "ce chemin est dans le dossier %s, dont cette extension ne supprime jamais rien"
 
-#: \includes\class-dahu-file-cleanup-admin.php:1044
+#: includes/class-dahu-file-cleanup-admin.php:1050
 msgid "the ceiling was reached; the rest goes on the next run"
 msgstr "le plafond a été atteint ; le reste passe à l’exécution suivante"
 
-#: \includes\class-dahu-file-cleanup-paths.php:53
+#: includes/class-dahu-file-cleanup-paths.php:53
 msgid "the path contains a null byte"
 msgstr "le chemin contient un octet nul"
 
-#: \includes\class-dahu-file-cleanup-paths.php:85
+#: includes/class-dahu-file-cleanup-paths.php:85
 msgid "the resolved path is outside this site: it is not under the WordPress root, wp-content or the uploads folder"
 msgstr "le chemin résolu sort du site : il n’est ni sous la racine WordPress, ni sous wp-content, ni sous le dossier d’uploads"
 
-#: \includes\class-dahu-file-cleanup-rules.php:336
+#: includes/class-dahu-file-cleanup-rules.php:336
 msgid "the rule has no name"
 msgstr "la règle n’a pas de nom"
 
-#: \includes\class-dahu-file-cleanup-paths.php:73
+#: includes/class-dahu-file-cleanup-paths.php:73
 msgid "the target is not a folder"
 msgstr "la cible n’est pas un dossier"
 
-#: \includes\class-dahu-file-cleanup-rules.php:269
+#: includes/class-dahu-file-cleanup-admin.php:1049
+msgid "this rule looked at as many files as its ceiling allows without finding that many to delete, and stopped; the rest goes on the next run"
+msgstr "cette règle a examiné autant de fichiers que son plafond l’autorise sans en trouver autant à supprimer, et s’est arrêtée ; le reste passe à l’exécution suivante"
+
+#: includes/class-dahu-file-cleanup-rules.php:269
 msgid "too long to be a file extension"
 msgstr "trop long pour être une extension de fichier"
 
-#: \includes\class-dahu-file-cleanup-paths.php:57
+#: includes/class-dahu-file-cleanup-paths.php:57
 msgid "wildcards (* ?) are not allowed: a rule targets a folder, and selects files by extension"
 msgstr "les jokers (* ?) sont interdits : une règle vise un dossier, et sélectionne les fichiers par extension"
 
 #. translators: %s: number of further files. */
-#: \includes\class-dahu-file-cleanup-admin.php:982
+#: includes/class-dahu-file-cleanup-admin.php:986
 msgid "… and %s more, not listed"
 msgstr "… et %s de plus, non listés"
 

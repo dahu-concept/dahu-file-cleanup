@@ -34,6 +34,59 @@ class Dahu_File_Cleanup_Runner {
 	const LOCK_TTL = 900;
 
 	/**
+	 * Directory entries a rule may inspect, per file it is allowed to delete.
+	 *
+	 * The per-run ceiling counts deletions, which is what the screen asks for
+	 * and what the log reports, and it stays that. But a ceiling on deletions
+	 * bounds nothing at all in the case it was written for: a folder whose
+	 * files are all too recent selects none of them, so no deletion is
+	 * counted, so the ceiling is never reached, and the run walks the whole
+	 * folder anyway. The guard-rail guarded the cheap case and let the
+	 * expensive one through.
+	 *
+	 * So the deletion ceiling is turned into a work budget by this factor,
+	 * and the walk stops on whichever comes first. The factor is what keeps
+	 * the two from fighting: the budget is always this many times larger than
+	 * the deletions allowed, so it cannot bite before the deletion ceiling in
+	 * any folder where even one file in ten is selectable — and a folder
+	 * sparser than that is, by itself, the folder this bound exists for.
+	 *
+	 * Set to 10 on 2026-10-30, down from 50. The factor was the open question
+	 * when the budget was introduced, and 10 is the answer.
+	 *
+	 * What that means in real numbers, because a ratio on its own is easy to
+	 * misread. The ceiling defaults to 2000, so the default budget is 20,000
+	 * directory entries per rule, down from 100,000. At the highest ceiling
+	 * the screen accepts, 100,000, it is a million entries, down from five.
+	 * The bound therefore does not bite at all on an ordinary folder: it bites
+	 * on a tree of tens of thousands of entries that yields almost no
+	 * deletions, which is the case it was written for and the case nothing
+	 * bounded before.
+	 *
+	 * A merchant who has lowered the ceiling gets the ratio applied to their
+	 * own number — set it to 4 and the walk stops after 40 entries, where the
+	 * old factor allowed 200 and the unbounded walk this bound replaced went
+	 * through the whole folder, 400 entries in the case that was measured.
+	 *
+	 * Lowering the factor tightens the bound, and that is the point, but it is
+	 * worth being explicit about who pays: a folder sparser than one in ten
+	 * now needs several runs where one used to do. That is not a loss, because
+	 * the bound is PER RUN and the run is scheduled — the next night continues
+	 * where this one stopped, and the log says `capped` so the merchant can
+	 * see it happening rather than guessing. A folder sparse enough to need
+	 * many nights is a folder whose rule is pointed at the wrong place, which
+	 * is a thing worth finding out.
+	 *
+	 * Deliberately NOT filterable, unlike the preview's
+	 * PREVIEW_WORK_BUDGET: that one guards a screen the merchant is watching,
+	 * this one guards an unattended run on someone else's shared host. If a
+	 * real folder ever needs more, raising `max_per_run` raises the budget
+	 * with it — that is why the budget is derived from the setting instead of
+	 * being a second number to keep in sync.
+	 */
+	const WORK_PER_DELETION = 10;
+
+	/**
 	 * Run every runnable rule, or one of them.
 	 *
 	 * @param string      $mode     'scheduled', 'manual' or 'cli'.
@@ -87,7 +140,9 @@ class Dahu_File_Cleanup_Runner {
 	 * @param string              $key     Rule key.
 	 * @param array<string,mixed> $rule    Rule.
 	 * @param string              $mode    Run mode.
-	 * @param int                 $ceiling Files allowed per rule per run.
+	 * @param int                 $ceiling Files allowed to be DELETED per rule
+	 *                                     per run. Also what the work budget
+	 *                                     handed to the walk is derived from.
 	 * @return array<string,mixed>
 	 */
 	private static function run_rule( $key, $rule, $mode, $ceiling ) {
@@ -97,6 +152,7 @@ class Dahu_File_Cleanup_Runner {
 		$failed  = 0;
 		$capped  = false;
 		$ceiling = max( 1, (int) $ceiling );
+		$budget  = $ceiling * self::WORK_PER_DELETION;
 
 		$diagnostics = Dahu_File_Cleanup_Scanner::walk(
 			$rule,
@@ -133,8 +189,33 @@ class Dahu_File_Cleanup_Runner {
 				}
 
 				return true;
-			}
+			},
+			$budget
 		);
+
+		// Why it stopped, if it did. The walk reports a path line it gave up
+		// on and says which bound ran out, so the two cases are told apart on
+		// screen: "come back tomorrow for the rest" and "this folder is too
+		// big to sweep at this ceiling" are different sentences and call for
+		// different actions.
+		$examined = 0;
+		$reason   = '';
+
+		foreach ( $diagnostics as $diagnostic ) {
+			$examined += (int) $diagnostic['examined'];
+
+			if ( '' === $reason && ! empty( $diagnostic['exhausted'] ) ) {
+				$reason = 'work' === $diagnostic['exhausted'] ? 'work' : 'deletions';
+			}
+		}
+
+		if ( '' === $reason && $capped ) {
+			// The visitor asked to stop on the very last entry of the walk,
+			// so the walk had nothing left to refuse. Still a cap.
+			$reason = 'deletions';
+		}
+
+		$capped = '' !== $reason;
 
 		Dahu_File_Cleanup_Log::add(
 			array(
@@ -149,12 +230,15 @@ class Dahu_File_Cleanup_Runner {
 		);
 
 		return array(
-			'label'       => $rule['label'],
-			'deleted'     => $deleted,
-			'bytes'       => $bytes,
-			'failed'      => $failed,
-			'capped'      => $capped,
-			'diagnostics' => $diagnostics,
+			'label'         => $rule['label'],
+			'deleted'       => $deleted,
+			'bytes'         => $bytes,
+			'failed'        => $failed,
+			'capped'        => $capped,
+			'capped_reason' => $reason,
+			'examined'      => $examined,
+			'budget'        => $budget,
+			'diagnostics'   => $diagnostics,
 		);
 	}
 

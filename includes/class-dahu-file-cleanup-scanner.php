@@ -33,17 +33,70 @@ class Dahu_File_Cleanup_Scanner {
 	const CLONE_HINT_THRESHOLD = 50;
 
 	/**
+	 * Directory entries the dry run may inspect, in total, before it stops.
+	 *
+	 * The dry run had no budget at all, and that was deliberate: a preview
+	 * that stops early counts fewer files than the rule would delete, and a
+	 * merchant reading "12 files will be deleted" off a count that stopped at
+	 * 12 out of 3,000 would decide on a false figure. A wrong number is worse
+	 * than a wait.
+	 *
+	 * But the preview is an administration page somebody is sitting in front
+	 * of, and the work it did was the size of the folder, whatever that was:
+	 * measured on a folder of 100,000 entries, it inspected 100,000 of them.
+	 * On the kind of storage a shared host gives a site, one stat() is not
+	 * free, and a request that long does not return at all — it hits the
+	 * execution limit, and the merchant gets a blank page instead of a wrong
+	 * number, which is no better.
+	 *
+	 * So the dry run is bounded too, and the honesty is bought back in words
+	 * rather than by removing the bound: when the budget runs out, the preview
+	 * says so, and says that its count is a floor and not the total. The two
+	 * cases — "this is everything" and "this is as far as I got" — are two
+	 * different sentences on screen, and this budget is what makes the second
+	 * one possible.
+	 *
+	 * Set much higher than a run's budget: nothing is deleted here, the cost
+	 * is one request and not a nightly job's, and the number has to be large
+	 * enough that an ordinary folder is never truncated.
+	 */
+	const PREVIEW_WORK_BUDGET = 25000;
+
+	/**
 	 * Walk a rule's folders, handing each selected file to a visitor.
 	 *
 	 * The visitor may return false to stop the walk — that is how the
-	 * per-run ceiling is enforced without the walk knowing what a ceiling
-	 * is.
+	 * per-run deletion ceiling is enforced without the walk knowing what a
+	 * deletion is.
 	 *
-	 * @param array<string,mixed> $rule    Rule.
-	 * @param callable            $visitor Receives one file array.
+	 * A ceiling the visitor enforces can only ever count what reached the
+	 * visitor, and what reaches the visitor is the SELECTED files. The work
+	 * of a walk is not its selections: a folder of forty thousand files of
+	 * which none is old enough selects nothing, calls the visitor never, and
+	 * still costs forty thousand stat() calls on a shared host. That is the
+	 * case a per-run limit exists for, and it is exactly the case a
+	 * visitor-side limit cannot see. So the walk is given its own budget,
+	 * counted in directory entries inspected, and it is the walk that stops
+	 * when the budget is gone.
+	 *
+	 * The budget is shared across the rule's path lines, because the cost it
+	 * bounds is the cost of the whole run of the rule.
+	 *
+	 * @param array<string,mixed> $rule         Rule.
+	 * @param callable            $visitor      Receives one file array.
+	 * @param int                 $work_ceiling Directory entries this walk may
+	 *                                          inspect in total; 0 for no
+	 *                                          budget. The dry run passes a
+	 *                                          budget of its own, far larger
+	 *                                          than a run's, and reports in
+	 *                                          words when it ran out — see
+	 *                                          preview() — because a truncated
+	 *                                          preview of an unknown remainder
+	 *                                          is a lie unless it says it is
+	 *                                          truncated.
 	 * @return array<int,array<string,mixed>> One diagnostic per path line.
 	 */
-	public static function walk( $rule, $visitor ) {
+	public static function walk( $rule, $visitor, $work_ceiling = 0 ) {
 
 		$rule        = Dahu_File_Cleanup_Rules::normalise( $rule );
 		$diagnostics = array();
@@ -56,9 +109,11 @@ class Dahu_File_Cleanup_Scanner {
 			return $diagnostics;
 		}
 
-		$cutoff    = time() - ( (int) $rule['days'] * DAY_IN_SECONDS );
-		$recursive = ! empty( $rule['recursive'] );
-		$stopped   = false;
+		$cutoff       = time() - ( (int) $rule['days'] * DAY_IN_SECONDS );
+		$recursive    = ! empty( $rule['recursive'] );
+		$stopped      = false;
+		$work_ceiling = max( 0, (int) $work_ceiling );
+		$examined     = 0;
 
 		foreach ( Dahu_File_Cleanup_Rules::path_lines( $rule ) as $line ) {
 
@@ -74,6 +129,8 @@ class Dahu_File_Cleanup_Scanner {
 				'oldest'     => null,
 				'newest'     => null,
 				'selected'   => 0,
+				'examined'   => 0,
+				'exhausted'  => '',
 			);
 
 			$validation = Dahu_File_Cleanup_Paths::validate( $line );
@@ -119,6 +176,19 @@ class Dahu_File_Cleanup_Scanner {
 				}
 
 				foreach ( $entries as $entry ) {
+
+					// Counted before anything is decided about the entry:
+					// the budget bounds the work, and looking at an entry
+					// in order to skip it is the work.
+					++$examined;
+					++$diagnostic['examined'];
+
+					if ( $work_ceiling && $examined >= $work_ceiling ) {
+						$diagnostic['exhausted'] = 'work';
+						$stopped                 = true;
+						$stack                   = array();
+						break;
+					}
 
 					// A symbolic link is never followed and never deleted,
 					// whether it points at a file or a directory. Counted so
@@ -186,8 +256,9 @@ class Dahu_File_Cleanup_Scanner {
 					);
 
 					if ( false === call_user_func( $visitor, $file ) ) {
-						$stopped = true;
-						$stack   = array();
+						$diagnostic['exhausted'] = 'visitor';
+						$stopped                 = true;
+						$stack                   = array();
 						break;
 					}
 				}
@@ -202,21 +273,48 @@ class Dahu_File_Cleanup_Scanner {
 	/**
 	 * Dry run: what this rule would delete right now.
 	 *
-	 * The file list is bounded because it is built in memory and printed to
-	 * a page. The totals are not: they count every selected file, so a
-	 * folder with fifty thousand candidates reports fifty thousand and
-	 * shows the first few hundred.
+	 * Two bounds, and they mean different things.
 	 *
-	 * @param array<string,mixed> $rule  Rule.
-	 * @param int                 $limit How many files to keep for display.
+	 * `$limit` bounds the file LIST only. The list is built in memory and
+	 * printed to a page, so it is cut; the totals are not affected, and
+	 * `truncated` says the list is shorter than the count.
+	 *
+	 * `$work_ceiling` bounds the WALK. When it runs out the walk stops where
+	 * it is, so `count` and `bytes` are no longer totals but floors — and
+	 * `complete` is false to say exactly that. A caller that prints `count`
+	 * without looking at `complete` prints a number the merchant will read as
+	 * the total when it is not; `preview_headline()` exists so no caller has
+	 * to get that right by hand.
+	 *
+	 * @param array<string,mixed> $rule         Rule.
+	 * @param int                 $limit        How many files to keep for display.
+	 * @param int|null            $work_ceiling Directory entries the walk may
+	 *                                          inspect; null for the default
+	 *                                          budget, 0 for no budget at all.
 	 * @return array<string,mixed>
 	 */
-	public static function preview( $rule, $limit = 200 ) {
+	public static function preview( $rule, $limit = 200, $work_ceiling = null ) {
 
 		$limit = max( 1, (int) $limit );
-		$files = array();
-		$count = 0;
-		$bytes = 0;
+
+		if ( null === $work_ceiling ) {
+			/**
+			 * Filters the directory entries a dry run may inspect.
+			 *
+			 * Raising this makes the preview more often complete and the page
+			 * slower; 0 removes the bound, which is what the command line can
+			 * afford and an administration page cannot.
+			 *
+			 * @param int                 $budget Entries the dry run may inspect.
+			 * @param array<string,mixed> $rule   The rule being previewed.
+			 */
+			$work_ceiling = apply_filters( 'dahu_file_cleanup_preview_work_budget', self::PREVIEW_WORK_BUDGET, $rule );
+		}
+
+		$work_ceiling = max( 0, (int) $work_ceiling );
+		$files        = array();
+		$count        = 0;
+		$bytes        = 0;
 
 		$diagnostics = self::walk(
 			$rule,
@@ -230,15 +328,84 @@ class Dahu_File_Cleanup_Scanner {
 				}
 
 				return true;
-			}
+			},
+			$work_ceiling
 		);
+
+		// The walk reports which bound ran out, per path line. Only 'work'
+		// can appear here: this visitor never returns false, so the walk is
+		// never stopped by the visitor during a dry run.
+		$examined = 0;
+		$stopped  = false;
+
+		foreach ( $diagnostics as $diagnostic ) {
+			$examined += (int) $diagnostic['examined'];
+
+			if ( 'work' === $diagnostic['exhausted'] ) {
+				$stopped = true;
+			}
+		}
 
 		return array(
 			'files'       => $files,
 			'count'       => $count,
 			'bytes'       => $bytes,
 			'truncated'   => $count > count( $files ),
+			'complete'    => ! $stopped,
+			'examined'    => $examined,
+			'budget'      => $work_ceiling,
 			'diagnostics' => $diagnostics,
+		);
+	}
+
+	/**
+	 * What the screen says about a dry run's figures, in one or two sentences.
+	 *
+	 * The whole point of bounding the dry run is here. A complete preview gets
+	 * one sentence and it states a total. A preview that stopped gets two: the
+	 * first states the figure as a FLOOR, in different words, so it cannot be
+	 * misread as the total; the second says the scan stopped and why, so the
+	 * merchant knows the decision in front of them is being made on partial
+	 * information and can act on that — raise the bound, or narrow the rule.
+	 *
+	 * Built here rather than in the screen so that it is one function with one
+	 * answer, used by every surface that reports a dry run, and so that it can
+	 * be measured without a browser.
+	 *
+	 * @param array<string,mixed> $preview A preview as returned above.
+	 * @return string[] One sentence, or two.
+	 */
+	public static function preview_headline( $preview ) {
+
+		$count    = isset( $preview['count'] ) ? (int) $preview['count'] : 0;
+		$bytes    = isset( $preview['bytes'] ) ? (int) $preview['bytes'] : 0;
+		$examined = isset( $preview['examined'] ) ? (int) $preview['examined'] : 0;
+
+		// Absent means an older caller that never had the key: treated as
+		// complete, which is what it was.
+		if ( ! array_key_exists( 'complete', $preview ) || $preview['complete'] ) {
+			return array(
+				sprintf(
+					/* translators: 1: number of files, 2: formatted size. */
+					__( '%1$s file(s) selected, %2$s', 'dahu-file-cleanup' ),
+					number_format_i18n( $count ),
+					size_format( $bytes )
+				),
+			);
+		}
+
+		return array(
+			sprintf(
+				/* translators: 1: number of files found so far, 2: formatted size. */
+				__( 'At least %1$s file(s) selected, at least %2$s — this is not the total.', 'dahu-file-cleanup' ),
+				number_format_i18n( $count ),
+				size_format( $bytes )
+			),
+			sprintf(
+				/* translators: %s: number of directory entries inspected. */
+				__( 'The scan stopped after looking at %s items, so it has not seen the whole folder and the real figures are higher. Narrow the rule to a smaller folder to get a complete count.', 'dahu-file-cleanup' ),
+				number_format_i18n( $examined )
+			),
 		);
 	}
 
