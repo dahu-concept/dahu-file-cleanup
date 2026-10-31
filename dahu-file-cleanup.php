@@ -5,7 +5,7 @@
  * Description:       A retention policy for the generated files that pile up on a WordPress server: named rules with their own folders, file extensions and maximum age, a dry run that lists every file before anything is deleted, a daily scheduled run, a per-run ceiling and a log.
  * Version:           1.1.1
  * Author:            Hugo Vial-Jaime
- * Author URI:        mailto:contact@dahu-concept.fr
+ * Author URI:        https://dahu-concept.fr
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       dahu-file-cleanup

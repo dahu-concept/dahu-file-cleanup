@@ -311,7 +311,24 @@ class Dahu_File_Cleanup_Runner {
 			return false;
 		}
 
-		return (bool) @unlink( $real ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- a file deleted by another process between the walk and here is an ordinary outcome, reported as a failure count, not a PHP warning on a cron run.
+		/*
+		 * wp_delete_file() RATHER THAN unlink(), AND THE RETURN IS MEASURED.
+		 *
+		 * The wrapper runs the `wp_delete_file` filter, so another plugin can
+		 * see -- or veto -- a deletion this one is about to make. That matters
+		 * for a plugin whose whole job is deleting files.
+		 *
+		 * It returns NOTHING, though, so `return (bool) wp_delete_file( ... )`
+		 * would always be false and every deletion would be counted as a
+		 * failure. The answer is therefore the fact rather than the call: the
+		 * stat cache is dropped for this path and the file's absence is what
+		 * is reported. A filter that emptied the path is correctly reported as
+		 * a failure, because the file is still there.
+		 */
+		wp_delete_file( $real );
+		clearstatcache( true, $real );
+
+		return ! file_exists( $real );
 	}
 
 	/**
