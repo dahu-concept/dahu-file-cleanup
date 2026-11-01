@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name:       Dahu File Cleanup
- * Plugin URI:        https://dahu-concept.fr
  * Description:       A retention policy for the generated files that pile up on a WordPress server: named rules with their own folders, file extensions and maximum age, a dry run that lists every file before anything is deleted, a daily scheduled run, a per-run ceiling and a log.
  * Version:           1.1.1
  * Author:            Hugo Vial-Jaime
