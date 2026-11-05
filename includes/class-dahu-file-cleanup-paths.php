@@ -42,7 +42,7 @@ class Dahu_File_Cleanup_Paths {
 		$path = trim( (string) $raw );
 
 		if ( '' === $path ) {
-			return self::refuse( __( 'empty path', 'dahu-file-cleanup' ) );
+			return self::refuse( __( 'empty path', 'ubac-cleanup' ) );
 		}
 
 		// A null byte truncates a path for the C functions underneath PHP,
@@ -50,11 +50,11 @@ class Dahu_File_Cleanup_Paths {
 		// stream wrappers reject it, but a path that reaches realpath() with
 		// one in it is not a typo and does not get a second chance here.
 		if ( false !== strpos( $path, "\0" ) ) {
-			return self::refuse( __( 'the path contains a null byte', 'dahu-file-cleanup' ) );
+			return self::refuse( __( 'the path contains a null byte', 'ubac-cleanup' ) );
 		}
 
 		if ( false !== strpos( $path, '*' ) || false !== strpos( $path, '?' ) ) {
-			return self::refuse( __( 'wildcards (* ?) are not allowed: a rule targets a folder, and selects files by extension', 'dahu-file-cleanup' ) );
+			return self::refuse( __( 'wildcards (* ?) are not allowed: a rule targets a folder, and selects files by extension', 'ubac-cleanup' ) );
 		}
 
 		$path = wp_normalize_path( $path );
@@ -66,11 +66,11 @@ class Dahu_File_Cleanup_Paths {
 		$real = realpath( $path );
 
 		if ( false === $real ) {
-			return self::refuse( __( 'no such folder on this server', 'dahu-file-cleanup' ) );
+			return self::refuse( __( 'no such folder on this server', 'ubac-cleanup' ) );
 		}
 
 		if ( ! is_dir( $real ) ) {
-			return self::refuse( __( 'the target is not a folder', 'dahu-file-cleanup' ) );
+			return self::refuse( __( 'the target is not a folder', 'ubac-cleanup' ) );
 		}
 
 		$real = untrailingslashit( wp_normalize_path( $real ) );
@@ -82,7 +82,7 @@ class Dahu_File_Cleanup_Paths {
 		// directory; a plugin that only accepted paths under ABSPATH would
 		// refuse the uploads folder of a correctly hardened site.
 		if ( ! self::inside_any( $real, self::allowed_roots() ) ) {
-			return self::refuse( __( 'the resolved path is outside this site: it is not under the WordPress root, wp-content or the uploads folder', 'dahu-file-cleanup' ) );
+			return self::refuse( __( 'the resolved path is outside this site: it is not under the WordPress root, wp-content or the uploads folder', 'ubac-cleanup' ) );
 		}
 
 		// --- Not inside a code, translation or update directory ---------
@@ -102,7 +102,7 @@ class Dahu_File_Cleanup_Paths {
 				return self::refuse(
 					sprintf(
 						/* translators: %s: name of a WordPress directory, e.g. "plugins". */
-						__( 'that path is inside the %s folder, which this plugin never deletes from', 'dahu-file-cleanup' ),
+						__( 'that path is inside the %s folder, which this plugin never deletes from', 'ubac-cleanup' ),
 						$label
 					)
 				);
@@ -112,7 +112,7 @@ class Dahu_File_Cleanup_Paths {
 		// --- Not a structural directory ---------------------------------
 		foreach ( self::protected_roots() as $protected ) {
 			if ( $real === $protected ) {
-				return self::refuse( __( 'that is a structural folder of the site (the WordPress root, wp-content or the uploads root): target a specific subfolder instead', 'dahu-file-cleanup' ) );
+				return self::refuse( __( 'that is a structural folder of the site (the WordPress root, wp-content or the uploads root): target a specific subfolder instead', 'ubac-cleanup' ) );
 			}
 		}
 

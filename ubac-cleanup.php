@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name:       Dahu File Cleanup
+ * Plugin Name:       Ubac File Cleanup
  * Description:       A retention policy for the generated files that pile up on a WordPress server: named rules with their own folders, file extensions and maximum age, a dry run that lists every file before anything is deleted, a daily scheduled run, a per-run ceiling and a log.
  * Version:           1.1.1
  * Author:            Hugo Vial-Jaime
  * Author URI:        https://dahu-concept.fr
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
- * Text Domain:       dahu-file-cleanup
+ * Text Domain:       ubac-cleanup
  * Domain Path:       /languages
  * Requires at least: 6.0
  * Requires PHP:      7.4
@@ -123,7 +123,7 @@ add_filter(
 		$settings = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'tools.php?page=' . DAHU_FILE_CLEANUP_PAGE ) ),
-			esc_html__( 'Rules', 'dahu-file-cleanup' )
+			esc_html__( 'Rules', 'ubac-cleanup' )
 		);
 
 		array_unshift( $links, $settings );
@@ -143,7 +143,7 @@ add_filter(
 		$links[] = sprintf(
 			'<a href="%s" target="_blank" rel="noopener">%s</a>',
 			esc_url( 'https://dahu-concept.fr' ),
-			esc_html__( 'Hugo Vial-Jaime — Dahu-Concept', 'dahu-file-cleanup' )
+			esc_html__( 'Hugo Vial-Jaime — Dahu-Concept', 'ubac-cleanup' )
 		);
 
 		return $links;
@@ -179,8 +179,8 @@ add_action(
 		Dahu_Welcome::register(
 			array(
 				'slug'       => 'dahu-file-cleanup',
-				'name'       => __( 'File cleanup', 'dahu-file-cleanup' ),
-				'tagline'    => __( 'Finds uploaded files no longer attached to anything.', 'dahu-file-cleanup' ),
+				'name'       => __( 'File cleanup', 'ubac-cleanup' ),
+				'tagline'    => __( 'Finds uploaded files no longer attached to anything.', 'ubac-cleanup' ),
 				'file'       => DAHU_FILE_CLEANUP_FILE,
 				'version'    => DAHU_FILE_CLEANUP_VERSION,
 				'textdomain' => 'dahu-file-cleanup',
@@ -199,24 +199,24 @@ add_action(
 				 * no text domain of its own.
 				 */
 				'strings'    => array(
-					'next'   => __( 'Next', 'dahu-file-cleanup' ),
-					'done'   => __( 'Done', 'dahu-file-cleanup' ),
-					'skip'   => __( 'Skip', 'dahu-file-cleanup' ),
-					'of'     => __( 'of', 'dahu-file-cleanup' ),
-					'denied' => __( 'You are not allowed to view this page.', 'dahu-file-cleanup' ),
+					'next'   => __( 'Next', 'ubac-cleanup' ),
+					'done'   => __( 'Done', 'ubac-cleanup' ),
+					'skip'   => __( 'Skip', 'ubac-cleanup' ),
+					'of'     => __( 'of', 'ubac-cleanup' ),
+					'denied' => __( 'You are not allowed to view this page.', 'ubac-cleanup' ),
 				),
 				'points'     => array(
 				array(
-					'title' => __( 'It looks first', 'dahu-file-cleanup' ),
-					'text'  => __( 'Nothing is removed until you have seen the list.', 'dahu-file-cleanup' ),
+					'title' => __( 'It looks first', 'ubac-cleanup' ),
+					'text'  => __( 'Nothing is removed until you have seen the list.', 'ubac-cleanup' ),
 				),
 				array(
-					'title' => __( 'It explains', 'dahu-file-cleanup' ),
-					'text'  => __( 'Each file says why it is thought to be unused.', 'dahu-file-cleanup' ),
+					'title' => __( 'It explains', 'ubac-cleanup' ),
+					'text'  => __( 'Each file says why it is thought to be unused.', 'ubac-cleanup' ),
 				),
 				array(
-					'title' => __( 'You choose', 'dahu-file-cleanup' ),
-					'text'  => __( 'Deletion is yours, file by file.', 'dahu-file-cleanup' ),
+					'title' => __( 'You choose', 'ubac-cleanup' ),
+					'text'  => __( 'Deletion is yours, file by file.', 'ubac-cleanup' ),
 				),
 				),
 
@@ -234,18 +234,18 @@ add_action(
 				'tour'        => array(
 					array(
 						'selector' => '#dahu-file-cleanup-__new-paths',
-						'title'    => __( 'Name the folders', 'dahu-file-cleanup' ),
-						'text'     => __( 'One per line. Only the folders you list are ever looked at.', 'dahu-file-cleanup' ),
+						'title'    => __( 'Name the folders', 'ubac-cleanup' ),
+						'text'     => __( 'One per line. Only the folders you list are ever looked at.', 'ubac-cleanup' ),
 					),
 					array(
 						'selector' => '#dahu-file-cleanup-ceiling',
-						'title'    => __( 'A safety ceiling', 'dahu-file-cleanup' ),
-						'text'     => __( 'A run stops after this many files, and says so in the log.', 'dahu-file-cleanup' ),
+						'title'    => __( 'A safety ceiling', 'ubac-cleanup' ),
+						'text'     => __( 'A run stops after this many files, and says so in the log.', 'ubac-cleanup' ),
 					),
 					array(
 						'selector' => '.dahu-file-cleanup__actions',
-						'title'    => __( 'Look before deleting', 'dahu-file-cleanup' ),
-						'text'     => __( 'The dry run lists what a rule would remove, and removes nothing.', 'dahu-file-cleanup' ),
+						'title'    => __( 'Look before deleting', 'ubac-cleanup' ),
+						'text'     => __( 'The dry run lists what a rule would remove, and removes nothing.', 'ubac-cleanup' ),
 					),
 				),
 			)

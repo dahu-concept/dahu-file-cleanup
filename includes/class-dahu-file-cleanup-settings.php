@@ -328,7 +328,7 @@ class Dahu_File_Cleanup_Settings {
 				'dahu-file-cleanup-extension-' . sanitize_key( $extension ),
 				sprintf(
 					/* translators: 1: file extension, 2: reason it was refused. */
-					__( 'Extension “%1$s” was not kept: %2$s', 'dahu-file-cleanup' ),
+					__( 'Extension “%1$s” was not kept: %2$s', 'ubac-cleanup' ),
 					$extension,
 					$reason
 				),

@@ -150,7 +150,7 @@ class Dahu_File_Cleanup_Scanner {
 				// remaining lines are still reported, with their validation
 				// result, so the screen does not look as though they were
 				// never configured.
-				$diagnostic['reason'] = __( 'not walked: the ceiling for this run was reached first', 'dahu-file-cleanup' );
+				$diagnostic['reason'] = __( 'not walked: the ceiling for this run was reached first', 'ubac-cleanup' );
 				$diagnostics[]        = $diagnostic;
 				continue;
 			}
@@ -387,7 +387,7 @@ class Dahu_File_Cleanup_Scanner {
 			return array(
 				sprintf(
 					/* translators: 1: number of files, 2: formatted size. */
-					__( '%1$s file(s) selected, %2$s', 'dahu-file-cleanup' ),
+					__( '%1$s file(s) selected, %2$s', 'ubac-cleanup' ),
 					number_format_i18n( $count ),
 					size_format( $bytes )
 				),
@@ -397,13 +397,13 @@ class Dahu_File_Cleanup_Scanner {
 		return array(
 			sprintf(
 				/* translators: 1: number of files found so far, 2: formatted size. */
-				__( 'At least %1$s file(s) selected, at least %2$s — this is not the total.', 'dahu-file-cleanup' ),
+				__( 'At least %1$s file(s) selected, at least %2$s — this is not the total.', 'ubac-cleanup' ),
 				number_format_i18n( $count ),
 				size_format( $bytes )
 			),
 			sprintf(
 				/* translators: %s: number of directory entries inspected. */
-				__( 'The scan stopped after looking at %s items, so it has not seen the whole folder and the real figures are higher. Narrow the rule to a smaller folder to get a complete count.', 'dahu-file-cleanup' ),
+				__( 'The scan stopped after looking at %s items, so it has not seen the whole folder and the real figures are higher. Narrow the rule to a smaller folder to get a complete count.', 'ubac-cleanup' ),
 				number_format_i18n( $examined )
 			),
 		);

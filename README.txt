@@ -1,4 +1,4 @@
-=== Dahu File Cleanup ===
+=== Ubac File Cleanup ===
 Contributors: dahuconcept
 Tags: housekeeping, old files, data retention, cleanup, cron
 Requires at least: 6.0
