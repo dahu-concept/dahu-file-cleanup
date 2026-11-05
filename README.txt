@@ -1,5 +1,5 @@
 === Ubac File Cleanup ===
-Contributors: ubacconcept
+Contributors: dahuconcept
 Tags: housekeeping, old files, data retention, cleanup, cron
 Requires at least: 6.0
 Tested up to: 7.1
