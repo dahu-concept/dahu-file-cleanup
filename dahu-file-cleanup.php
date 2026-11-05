@@ -26,18 +26,13 @@ define( 'DAHU_FILE_CLEANUP_CRON', 'dahu_file_cleanup_daily' );
 
 /* -------------------------------------------------------------------------
  * Translations
+ *
+ * There is deliberately no load_plugin_textdomain() call here. Since
+ * WordPress 4.6 the translations of a plugin hosted on WordPress.org are
+ * loaded on demand, and the directory's review asks that the call be removed
+ * rather than kept: this plugin requires 6.0, so there is no older WordPress
+ * to cover. Translations come from translate.wordpress.org.
  * ---------------------------------------------------------------------- */
-
-add_action(
-	'init',
-	static function () {
-		load_plugin_textdomain(
-			'dahu-file-cleanup',
-			false,
-			dirname( plugin_basename( __FILE__ ) ) . '/languages'
-		);
-	}
-);
 
 /* -------------------------------------------------------------------------
  * Bootstrap
