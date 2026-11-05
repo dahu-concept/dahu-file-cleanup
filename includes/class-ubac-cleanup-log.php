@@ -11,9 +11,9 @@
  * the most useful log imaginable and also an option that grows without bound
  * on a site that deletes thousands of files a night — and an option that
  * large makes every page load on the site slower. Sites that need per-file
- * accounting have `dahu_file_cleanup_delete_file`, which sees each one.
+ * accounting have `ubac_cleanup_delete_file`, which sees each one.
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -21,12 +21,12 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Run history.
  */
-class Dahu_File_Cleanup_Log {
+class Ubac_Cleanup_Log {
 
 	/**
 	 * Option name.
 	 */
-	const OPTION = 'dahu_file_cleanup_log';
+	const OPTION = 'ubac_cleanup_log';
 
 	/**
 	 * Rows kept.

@@ -15,7 +15,7 @@
  * has several causes, and guessing between them over somebody's invoices is
  * not acceptable.
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -23,17 +23,17 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Admin screen.
  */
-class Dahu_File_Cleanup_Admin {
+class Ubac_Cleanup_Admin {
 
 	/**
 	 * admin_post action that deletes a rule.
 	 */
-	const DELETE_ACTION = 'dahu_file_cleanup_delete_rule';
+	const DELETE_ACTION = 'ubac_cleanup_delete_rule';
 
 	/**
 	 * admin_post action that adds a preset.
 	 */
-	const PRESET_ACTION = 'dahu_file_cleanup_add_preset';
+	const PRESET_ACTION = 'ubac_cleanup_add_preset';
 
 	/**
 	 * Capability for everything on this screen.
@@ -65,7 +65,7 @@ class Dahu_File_Cleanup_Admin {
 	public static function init() {
 
 		add_action( 'admin_menu', array( __CLASS__, 'add_page' ) );
-		add_action( 'admin_init', array( 'Dahu_File_Cleanup_Settings', 'register' ) );
+		add_action( 'admin_init', array( 'Ubac_Cleanup_Settings', 'register' ) );
 		add_action( 'admin_init', array( __CLASS__, 'handle_screen_actions' ) );
 		add_action( 'admin_post_' . self::DELETE_ACTION, array( __CLASS__, 'handle_delete' ) );
 		add_action( 'admin_post_' . self::PRESET_ACTION, array( __CLASS__, 'handle_preset' ) );
@@ -83,7 +83,7 @@ class Dahu_File_Cleanup_Admin {
 			__( 'File cleanup', 'ubac-cleanup' ),
 			__( 'File cleanup', 'ubac-cleanup' ),
 			self::CAPABILITY,
-			DAHU_FILE_CLEANUP_PAGE,
+			UBAC_CLEANUP_PAGE,
 			array( __CLASS__, 'render' )
 		);
 	}
@@ -96,7 +96,7 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	public static function enqueue( $hook ) {
 
-		if ( 'tools_page_' . DAHU_FILE_CLEANUP_PAGE !== $hook ) {
+		if ( 'tools_page_' . UBAC_CLEANUP_PAGE !== $hook ) {
 			return;
 		}
 
@@ -107,17 +107,17 @@ class Dahu_File_Cleanup_Admin {
 		// first serves all of them, and a shop with six of these installed
 		// downloads one copy.
 		wp_enqueue_style(
-			'dahu-ui',
-			DAHU_FILE_CLEANUP_URL . 'assets/css/dahu-ui.css',
+			'ubac-ui',
+			UBAC_CLEANUP_URL . 'assets/css/ubac-ui.css',
 			array(),
-			DAHU_FILE_CLEANUP_VERSION
+			UBAC_CLEANUP_VERSION
 		);
 
 		wp_enqueue_style(
-			'dahu-file-cleanup-admin',
-			DAHU_FILE_CLEANUP_URL . 'assets/css/admin.css',
-			array( 'dahu-ui' ),
-			DAHU_FILE_CLEANUP_VERSION
+			'ubac-cleanup-admin',
+			UBAC_CLEANUP_URL . 'assets/css/admin.css',
+			array( 'ubac-ui' ),
+			UBAC_CLEANUP_VERSION
 		);
 	}
 
@@ -137,7 +137,7 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	public static function handle_screen_actions() {
 
-		if ( ! isset( $_POST['dahu_file_cleanup_action'] ) ) {
+		if ( ! isset( $_POST['ubac_cleanup_action'] ) ) {
 			return;
 		}
 
@@ -145,25 +145,25 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		$action = sanitize_key( wp_unslash( $_POST['dahu_file_cleanup_action'] ) );
+		$action = sanitize_key( wp_unslash( $_POST['ubac_cleanup_action'] ) );
 
 		if ( 'preview' === $action ) {
-			check_admin_referer( 'dahu_file_cleanup_preview' );
+			check_admin_referer( 'ubac_cleanup_preview' );
 			self::$preview = self::build_preview();
 
 			return;
 		}
 
 		if ( 'run' === $action ) {
-			check_admin_referer( 'dahu_file_cleanup_run' );
-			self::$summary = Dahu_File_Cleanup_Runner::run( 'manual' );
+			check_admin_referer( 'ubac_cleanup_run' );
+			self::$summary = Ubac_Cleanup_Runner::run( 'manual' );
 
 			return;
 		}
 
 		if ( 'clear-log' === $action ) {
-			check_admin_referer( 'dahu_file_cleanup_clear_log' );
-			Dahu_File_Cleanup_Log::clear();
+			check_admin_referer( 'ubac_cleanup_clear_log' );
+			Ubac_Cleanup_Log::clear();
 		}
 	}
 
@@ -179,13 +179,13 @@ class Dahu_File_Cleanup_Admin {
 
 		$preview = array();
 
-		foreach ( Dahu_File_Cleanup_Settings::rules() as $key => $rule ) {
-			$preview[ $key ] = Dahu_File_Cleanup_Scanner::preview( $rule );
+		foreach ( Ubac_Cleanup_Settings::rules() as $key => $rule ) {
+			$preview[ $key ] = Ubac_Cleanup_Scanner::preview( $rule );
 
 			$preview[ $key ]['label']     = $rule['label'];
 			$preview[ $key ]['enabled']   = ! empty( $rule['enabled'] );
 			$preview[ $key ]['recursive'] = ! empty( $rule['recursive'] );
-			$preview[ $key ]['blockers']  = Dahu_File_Cleanup_Rules::blockers( $rule );
+			$preview[ $key ]['blockers']  = Ubac_Cleanup_Rules::blockers( $rule );
 		}
 
 		return $preview;
@@ -205,20 +205,20 @@ class Dahu_File_Cleanup_Admin {
 		check_admin_referer( self::DELETE_ACTION );
 
 		$key      = isset( $_POST['rule'] ) ? sanitize_key( wp_unslash( $_POST['rule'] ) ) : '';
-		$settings = Dahu_File_Cleanup_Settings::get();
+		$settings = Ubac_Cleanup_Settings::get();
 		$deleted  = false;
 
 		if ( '' !== $key && isset( $settings['rules'][ $key ] ) ) {
 			unset( $settings['rules'][ $key ] );
-			Dahu_File_Cleanup_Settings::save( $settings );
+			Ubac_Cleanup_Settings::save( $settings );
 			$deleted = true;
 		}
 
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'                    => DAHU_FILE_CLEANUP_PAGE,
-					'dahu-file-cleanup-notice' => $deleted ? 'rule-deleted' : 'rule-missing',
+					'page'                    => UBAC_CLEANUP_PAGE,
+					'ubac-cleanup-notice' => $deleted ? 'rule-deleted' : 'rule-missing',
 				),
 				admin_url( 'tools.php' )
 			)
@@ -240,35 +240,35 @@ class Dahu_File_Cleanup_Admin {
 		check_admin_referer( self::PRESET_ACTION );
 
 		$wanted  = isset( $_POST['preset'] ) ? sanitize_key( wp_unslash( $_POST['preset'] ) ) : '';
-		$presets = Dahu_File_Cleanup_Rules::presets();
+		$presets = Ubac_Cleanup_Rules::presets();
 		$notice  = 'preset-missing';
 
 		if ( isset( $presets[ $wanted ] ) ) {
-			$settings = Dahu_File_Cleanup_Settings::get();
+			$settings = Ubac_Cleanup_Settings::get();
 			$preset   = $presets[ $wanted ];
 
 			unset( $preset['note'] );
 
-			$key = Dahu_File_Cleanup_Rules::make_key(
+			$key = Ubac_Cleanup_Rules::make_key(
 				isset( $preset['label'] ) ? $preset['label'] : $wanted,
 				array_keys( $settings['rules'] )
 			);
 
-			$settings['rules'][ $key ] = Dahu_File_Cleanup_Rules::normalise( $preset );
+			$settings['rules'][ $key ] = Ubac_Cleanup_Rules::normalise( $preset );
 
 			// Belt and braces: a preset arrives switched off whatever it
 			// says, so that adding one can never start deleting files.
 			$settings['rules'][ $key ]['enabled'] = false;
 
-			Dahu_File_Cleanup_Settings::save( $settings );
+			Ubac_Cleanup_Settings::save( $settings );
 			$notice = 'preset-added';
 		}
 
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'                     => DAHU_FILE_CLEANUP_PAGE,
-					'dahu-file-cleanup-notice' => $notice,
+					'page'                     => UBAC_CLEANUP_PAGE,
+					'ubac-cleanup-notice' => $notice,
 				),
 				admin_url( 'tools.php' )
 			)
@@ -291,14 +291,14 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		$settings = Dahu_File_Cleanup_Settings::get();
+		$settings = Ubac_Cleanup_Settings::get();
 		$rules    = $settings['rules'];
 
-		echo '<div class="wrap dahu-ui dahu-file-cleanup">';
+		echo '<div class="wrap ubac-ui ubac-cleanup">';
 
-		echo '<div class="dahu-ui-head">';
-		printf( '<h1 class="dahu-ui-head__title">%s</h1>', esc_html__( 'File cleanup', 'ubac-cleanup' ) );
-		printf( '<p class="dahu-ui-head__sub">%s</p>', esc_html__( 'Finds uploaded files no longer attached to anything.', 'ubac-cleanup' ) );
+		echo '<div class="ubac-ui-head">';
+		printf( '<h1 class="ubac-ui-head__title">%s</h1>', esc_html__( 'File cleanup', 'ubac-cleanup' ) );
+		printf( '<p class="ubac-ui-head__sub">%s</p>', esc_html__( 'Finds uploaded files no longer attached to anything.', 'ubac-cleanup' ) );
 		echo '</div>';
 
 		// WordPress moves every admin notice to just after the first heading
@@ -313,7 +313,7 @@ class Dahu_File_Cleanup_Admin {
 		self::render_cron_warning();
 		self::render_status( $settings, $rules );
 
-		settings_errors( Dahu_File_Cleanup_Settings::OPTION );
+		settings_errors( Ubac_Cleanup_Settings::OPTION );
 
 		self::render_form( $settings, $rules );
 		self::render_delete_forms( $rules );
@@ -333,11 +333,11 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_notices() {
 
-		if ( ! isset( $_GET['dahu-file-cleanup-notice'] ) ) {
+		if ( ! isset( $_GET['ubac-cleanup-notice'] ) ) {
 			return;
 		}
 
-		$notice = sanitize_key( wp_unslash( $_GET['dahu-file-cleanup-notice'] ) );
+		$notice = sanitize_key( wp_unslash( $_GET['ubac-cleanup-notice'] ) );
 
 		$messages = array(
 			'rule-deleted'   => array( 'success', __( 'Rule deleted. No files were touched: deleting a rule only removes the rule.', 'ubac-cleanup' ) ),
@@ -371,7 +371,7 @@ class Dahu_File_Cleanup_Admin {
 	private static function render_standing_warning() {
 
 		printf(
-			'<div class="notice notice-warning dahu-file-cleanup__standing"><p><strong>%1$s</strong> %2$s</p></div>',
+			'<div class="notice notice-warning ubac-cleanup__standing"><p><strong>%1$s</strong> %2$s</p></div>',
 			esc_html__( 'Deleted files are gone.', 'ubac-cleanup' ),
 			esc_html__( 'There is no undo and no trash. Generated files are often business records as well: invoices, delivery notes, quotes and accounting exports have minimum retention periods in most countries, and a backup archive is sometimes the only copy of something. Use the dry run, and set a retention you can defend.', 'ubac-cleanup' )
 		);
@@ -404,9 +404,9 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_status( $settings, $rules ) {
 
-		$enabled = count( Dahu_File_Cleanup_Settings::runnable_rules() );
-		$next    = wp_next_scheduled( DAHU_FILE_CLEANUP_CRON );
-		$totals  = Dahu_File_Cleanup_Log::totals();
+		$enabled = count( Ubac_Cleanup_Settings::runnable_rules() );
+		$next    = wp_next_scheduled( UBAC_CLEANUP_CRON );
+		$totals  = Ubac_Cleanup_Log::totals();
 
 		$lines = array(
 			__( 'Rules', 'ubac-cleanup' )              => sprintf(
@@ -431,11 +431,11 @@ class Dahu_File_Cleanup_Admin {
 			),
 		);
 
-		echo '<div class="dahu-ui-card"><table class="widefat dahu-file-cleanup__status"><tbody>';
+		echo '<div class="ubac-ui-card"><table class="widefat ubac-cleanup__status"><tbody>';
 
 		foreach ( $lines as $label => $value ) {
 			printf(
-				'<tr><th scope="row">%1$s</th><td class="dahu-file-cleanup__num">%2$s</td></tr>',
+				'<tr><th scope="row">%1$s</th><td class="ubac-cleanup__num">%2$s</td></tr>',
 				esc_html( $label ),
 				esc_html( $value )
 			);
@@ -453,17 +453,17 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_form( $settings, $rules ) {
 
-		$option = Dahu_File_Cleanup_Settings::OPTION;
+		$option = Ubac_Cleanup_Settings::OPTION;
 
 		printf( '<form method="post" action="%s">', esc_url( admin_url( 'options.php' ) ) );
 
-		settings_fields( Dahu_File_Cleanup_Settings::GROUP );
+		settings_fields( Ubac_Cleanup_Settings::GROUP );
 
 		printf( '<h2>%s</h2>', esc_html__( 'Rules', 'ubac-cleanup' ) );
 
 		if ( ! $rules ) {
 			printf(
-				'<p class="dahu-ui-hint">%s</p>',
+				'<p class="ubac-ui-hint">%s</p>',
 				esc_html__( 'No rules yet, so nothing is deleted. Fill in the empty rule below, or add a ready-made one.', 'ubac-cleanup' )
 			);
 		}
@@ -472,16 +472,16 @@ class Dahu_File_Cleanup_Admin {
 			self::render_rule( $option, $key, $rule );
 		}
 
-		self::render_rule( $option, '__new', Dahu_File_Cleanup_Rules::blank(), true );
+		self::render_rule( $option, '__new', Ubac_Cleanup_Rules::blank(), true );
 
-		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Limits', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Limits', 'ubac-cleanup' ) );
 
 		echo '<table class="form-table" role="presentation"><tbody>';
 
 		printf(
-			'<tr><th scope="row"><label for="dahu-file-cleanup-ceiling">%1$s</label></th><td><input type="number" min="1" max="%2$s" step="1" class="small-text" id="dahu-file-cleanup-ceiling" name="%3$s[max_per_run]" value="%4$s"> <span class="dahu-file-cleanup__muted">%5$s</span><p class="description">%6$s</p></td></tr>',
+			'<tr><th scope="row"><label for="ubac-cleanup-ceiling">%1$s</label></th><td><input type="number" min="1" max="%2$s" step="1" class="small-text" id="ubac-cleanup-ceiling" name="%3$s[max_per_run]" value="%4$s"> <span class="ubac-cleanup__muted">%5$s</span><p class="description">%6$s</p></td></tr>',
 			esc_html__( 'Files per rule per run', 'ubac-cleanup' ),
-			esc_attr( Dahu_File_Cleanup_Settings::MAX_PER_RUN_LIMIT ),
+			esc_attr( Ubac_Cleanup_Settings::MAX_PER_RUN_LIMIT ),
 			esc_attr( $option ),
 			esc_attr( (string) $settings['max_per_run'] ),
 			esc_html__( 'files', 'ubac-cleanup' ),
@@ -515,16 +515,16 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_rule( $option, $key, $rule, $is_new = false ) {
 
-		$blockers = $is_new ? array() : Dahu_File_Cleanup_Rules::blockers( $rule );
+		$blockers = $is_new ? array() : Ubac_Cleanup_Rules::blockers( $rule );
 		$name     = sprintf( '%s[rules][%s]', $option, $key );
-		$id       = 'dahu-file-cleanup-' . sanitize_html_class( $key );
+		$id       = 'ubac-cleanup-' . sanitize_html_class( $key );
 
-		echo '<div class="dahu-ui-card dahu-file-cleanup__panel">';
+		echo '<div class="ubac-ui-card ubac-cleanup__panel">';
 
-		echo '<div class="dahu-file-cleanup__panel-header">';
+		echo '<div class="ubac-cleanup__panel-header">';
 
 		printf(
-			'<span class="dahu-file-cleanup__panel-title">%s</span>',
+			'<span class="ubac-cleanup__panel-title">%s</span>',
 			esc_html(
 				$is_new
 					? __( 'New rule', 'ubac-cleanup' )
@@ -534,7 +534,7 @@ class Dahu_File_Cleanup_Admin {
 
 		if ( ! $is_new ) {
 			printf(
-				'<span class="dahu-file-cleanup__panel-state">%s</span>',
+				'<span class="ubac-cleanup__panel-state">%s</span>',
 				esc_html(
 					$blockers
 						? __( 'incomplete', 'ubac-cleanup' )
@@ -543,7 +543,7 @@ class Dahu_File_Cleanup_Admin {
 			);
 
 			printf(
-				'<button type="submit" form="dahu-file-cleanup-delete-%1$s" class="button-link dahu-file-cleanup__delete">%2$s</button>',
+				'<button type="submit" form="ubac-cleanup-delete-%1$s" class="button-link ubac-cleanup__delete">%2$s</button>',
 				esc_attr( sanitize_html_class( $key ) ),
 				esc_html__( 'Delete rule', 'ubac-cleanup' )
 			);
@@ -552,7 +552,7 @@ class Dahu_File_Cleanup_Admin {
 		echo '</div>';
 
 		if ( $blockers ) {
-			echo '<ul class="dahu-file-cleanup__blockers">';
+			echo '<ul class="ubac-cleanup__blockers">';
 
 			foreach ( $blockers as $blocker ) {
 				printf( '<li>%s</li>', esc_html( $blocker ) );
@@ -592,7 +592,7 @@ class Dahu_File_Cleanup_Admin {
 		);
 
 		printf(
-			'<tr><th scope="row"><label for="%1$s-days">%2$s</label></th><td><input type="number" min="1" step="1" class="small-text" id="%1$s-days" name="%3$s[days]" value="%4$s"> <span class="dahu-file-cleanup__muted">%5$s</span><p class="description">%6$s</p></td></tr>',
+			'<tr><th scope="row"><label for="%1$s-days">%2$s</label></th><td><input type="number" min="1" step="1" class="small-text" id="%1$s-days" name="%3$s[days]" value="%4$s"> <span class="ubac-cleanup__muted">%5$s</span><p class="description">%6$s</p></td></tr>',
 			esc_attr( $id ),
 			esc_html__( 'Delete files older than', 'ubac-cleanup' ),
 			esc_attr( $name ),
@@ -638,7 +638,7 @@ class Dahu_File_Cleanup_Admin {
 
 		foreach ( $rules as $key => $rule ) {
 			printf(
-				'<form id="dahu-file-cleanup-delete-%1$s" method="post" action="%2$s" class="dahu-file-cleanup__delete-form">',
+				'<form id="ubac-cleanup-delete-%1$s" method="post" action="%2$s" class="ubac-cleanup__delete-form">',
 				esc_attr( sanitize_html_class( $key ) ),
 				esc_url( admin_url( 'admin-post.php' ) )
 			);
@@ -659,21 +659,21 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_presets() {
 
-		$presets = Dahu_File_Cleanup_Rules::presets();
+		$presets = Ubac_Cleanup_Rules::presets();
 
 		if ( ! $presets ) {
 			return;
 		}
 
-		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Ready-made rules', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Ready-made rules', 'ubac-cleanup' ) );
 
 		printf(
-			'<p class="dahu-file-cleanup__muted">%s</p>',
+			'<p class="ubac-cleanup__muted">%s</p>',
 			esc_html__( 'The default folders of plugins known to leave files behind. Added switched off, with the folder editable: a site that moved the folder, or does not have that plugin, sees the dry run say so.', 'ubac-cleanup' )
 		);
 
 		printf(
-			'<form method="post" action="%s" class="dahu-file-cleanup__presets">',
+			'<form method="post" action="%s" class="ubac-cleanup__presets">',
 			esc_url( admin_url( 'admin-post.php' ) )
 		);
 
@@ -694,13 +694,13 @@ class Dahu_File_Cleanup_Admin {
 		echo '</select> ';
 
 		printf(
-			'<button type="submit" class="dahu-ui-btn">%s</button>',
+			'<button type="submit" class="ubac-ui-btn">%s</button>',
 			esc_html__( 'Add as a new rule', 'ubac-cleanup' )
 		);
 
 		echo '</form>';
 
-		echo '<ul class="dahu-file-cleanup__preset-notes">';
+		echo '<ul class="ubac-cleanup__preset-notes">';
 
 		foreach ( $presets as $preset ) {
 			if ( empty( $preset['note'] ) ) {
@@ -725,25 +725,25 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_actions( $rules ) {
 
-		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Actions', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Actions', 'ubac-cleanup' ) );
 
-		echo '<div class="dahu-file-cleanup__actions">';
+		echo '<div class="ubac-cleanup__actions">';
 
 		printf( '<form method="post" action="%s">', esc_url( self::screen_url() ) );
-		wp_nonce_field( 'dahu_file_cleanup_preview' );
-		echo '<input type="hidden" name="dahu_file_cleanup_action" value="preview">';
+		wp_nonce_field( 'ubac_cleanup_preview' );
+		echo '<input type="hidden" name="ubac_cleanup_action" value="preview">';
 		printf(
-			'<button type="submit" class="dahu-ui-btn dahu-ui-btn--go">%s</button>',
+			'<button type="submit" class="ubac-ui-btn ubac-ui-btn--go">%s</button>',
 			esc_html__( 'Dry run — deletes nothing', 'ubac-cleanup' )
 		);
 		echo '</form>';
 
 		if ( $rules ) {
 			printf( '<form method="post" action="%s">', esc_url( self::screen_url() ) );
-			wp_nonce_field( 'dahu_file_cleanup_run' );
-			echo '<input type="hidden" name="dahu_file_cleanup_action" value="run">';
+			wp_nonce_field( 'ubac_cleanup_run' );
+			echo '<input type="hidden" name="ubac_cleanup_action" value="run">';
 			printf(
-				'<button type="submit" class="dahu-ui-btn">%s</button>',
+				'<button type="submit" class="ubac-ui-btn">%s</button>',
 				esc_html__( 'Run the enabled rules now', 'ubac-cleanup' )
 			);
 			echo '</form>';
@@ -770,20 +770,20 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Dry run — nothing was deleted', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Dry run — nothing was deleted', 'ubac-cleanup' ) );
 
 		if ( ! self::$preview ) {
-			printf( '<p class="dahu-file-cleanup__muted">%s</p>', esc_html__( 'There are no rules to run.', 'ubac-cleanup' ) );
+			printf( '<p class="ubac-cleanup__muted">%s</p>', esc_html__( 'There are no rules to run.', 'ubac-cleanup' ) );
 			echo '</div>';
 
 			return;
 		}
 
 		foreach ( self::$preview as $key => $block ) {
-			echo '<div class="dahu-file-cleanup__preview">';
+			echo '<div class="ubac-cleanup__preview">';
 
 			printf(
-				'<h3>%1$s <span class="dahu-file-cleanup__panel-state">%2$s</span></h3>',
+				'<h3>%1$s <span class="ubac-cleanup__panel-state">%2$s</span></h3>',
 				esc_html( '' !== $block['label'] ? $block['label'] : $key ),
 				esc_html(
 					$block['blockers']
@@ -793,7 +793,7 @@ class Dahu_File_Cleanup_Admin {
 			);
 
 			foreach ( $block['blockers'] as $blocker ) {
-				printf( '<p class="dahu-file-cleanup__warn">%s</p>', esc_html( $blocker ) );
+				printf( '<p class="ubac-cleanup__warn">%s</p>', esc_html( $blocker ) );
 			}
 
 			// One sentence when the scan saw the whole folder, two when it
@@ -801,15 +801,15 @@ class Dahu_File_Cleanup_Admin {
 			// only a floor read as a total is a decision made on a false
 			// number. The wording is the scanner's, so every surface that
 			// reports a dry run says the same thing.
-			$headline = Dahu_File_Cleanup_Scanner::preview_headline( $block );
+			$headline = Ubac_Cleanup_Scanner::preview_headline( $block );
 
 			printf(
-				'<p class="dahu-file-cleanup__num"><strong>%1$s</strong></p>',
+				'<p class="ubac-cleanup__num"><strong>%1$s</strong></p>',
 				esc_html( array_shift( $headline ) )
 			);
 
 			foreach ( $headline as $sentence ) {
-				printf( '<p class="dahu-file-cleanup__warn">%s</p>', esc_html( $sentence ) );
+				printf( '<p class="ubac-cleanup__warn">%s</p>', esc_html( $sentence ) );
 			}
 
 			self::render_diagnostics( $block['diagnostics'] );
@@ -848,7 +848,7 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		echo '<table class="widefat striped dahu-file-cleanup__diagnostics"><thead><tr>';
+		echo '<table class="widefat striped ubac-cleanup__diagnostics"><thead><tr>';
 
 		$headings = array(
 			__( 'Folder as typed', 'ubac-cleanup' ),
@@ -869,23 +869,23 @@ class Dahu_File_Cleanup_Admin {
 		foreach ( $diagnostics as $diagnostic ) {
 			echo '<tr>';
 
-			printf( '<td><code class="dahu-file-cleanup__path">%s</code></td>', esc_html( $diagnostic['line'] ) );
+			printf( '<td><code class="ubac-cleanup__path">%s</code></td>', esc_html( $diagnostic['line'] ) );
 
 			if ( $diagnostic['ok'] ) {
 				printf(
-					'<td><code class="dahu-file-cleanup__path">%1$s</code>%2$s</td>',
+					'<td><code class="ubac-cleanup__path">%1$s</code>%2$s</td>',
 					esc_html( $diagnostic['resolved'] ),
-					$diagnostic['reason'] ? '<br><span class="dahu-file-cleanup__warn">' . esc_html( $diagnostic['reason'] ) . '</span>' : ''
+					$diagnostic['reason'] ? '<br><span class="ubac-cleanup__warn">' . esc_html( $diagnostic['reason'] ) . '</span>' : ''
 				);
 			} else {
-				printf( '<td><span class="dahu-file-cleanup__warn">%s</span></td>', esc_html( $diagnostic['reason'] ) );
+				printf( '<td><span class="ubac-cleanup__warn">%s</span></td>', esc_html( $diagnostic['reason'] ) );
 			}
 
 			printf(
-				'<td class="dahu-file-cleanup__num">%1$s%2$s</td>',
+				'<td class="ubac-cleanup__num">%1$s%2$s</td>',
 				esc_html( number_format_i18n( $diagnostic['files'] ) ),
 				$diagnostic['symlinks']
-					? '<br><span class="dahu-file-cleanup__muted">' . esc_html(
+					? '<br><span class="ubac-cleanup__muted">' . esc_html(
 						sprintf(
 							/* translators: %s: number of symbolic links. */
 							_n( '%s link skipped', '%s links skipped', $diagnostic['symlinks'], 'ubac-cleanup' ),
@@ -895,19 +895,19 @@ class Dahu_File_Cleanup_Admin {
 					: ''
 			);
 
-			printf( '<td class="dahu-file-cleanup__num">%s</td>', esc_html( number_format_i18n( $diagnostic['matching'] ) ) );
-			printf( '<td class="dahu-file-cleanup__num">%s</td>', esc_html( null === $diagnostic['oldest'] ? '—' : wp_date( 'Y-m-d H:i', $diagnostic['oldest'] ) ) );
-			printf( '<td class="dahu-file-cleanup__num">%s</td>', esc_html( null === $diagnostic['newest'] ? '—' : wp_date( 'Y-m-d H:i', $diagnostic['newest'] ) ) );
-			printf( '<td class="dahu-file-cleanup__num">%s</td>', esc_html( number_format_i18n( $diagnostic['selected'] ) ) );
+			printf( '<td class="ubac-cleanup__num">%s</td>', esc_html( number_format_i18n( $diagnostic['matching'] ) ) );
+			printf( '<td class="ubac-cleanup__num">%s</td>', esc_html( null === $diagnostic['oldest'] ? '—' : wp_date( 'Y-m-d H:i', $diagnostic['oldest'] ) ) );
+			printf( '<td class="ubac-cleanup__num">%s</td>', esc_html( null === $diagnostic['newest'] ? '—' : wp_date( 'Y-m-d H:i', $diagnostic['newest'] ) ) );
+			printf( '<td class="ubac-cleanup__num">%s</td>', esc_html( number_format_i18n( $diagnostic['selected'] ) ) );
 
 			echo '</tr>';
 		}
 
 		echo '</tbody></table>';
 
-		if ( Dahu_File_Cleanup_Scanner::looks_like_reset_timestamps( $diagnostics ) ) {
+		if ( Ubac_Cleanup_Scanner::looks_like_reset_timestamps( $diagnostics ) ) {
 			printf(
-				'<p class="dahu-file-cleanup__warn">%s</p>',
+				'<p class="ubac-cleanup__warn">%s</p>',
 				esc_html__( 'Worth a look: plenty of files carry an extension this rule selects, and not one of them is old enough. If that folder is supposed to hold old files, their modification times have probably been reset by a clone or a restore of this environment — in which case no retention can find anything old here, however old the files really are elsewhere.', 'ubac-cleanup' )
 			);
 		}
@@ -921,7 +921,7 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_subfolders( $block ) {
 
-		$folders = Dahu_File_Cleanup_Scanner::by_subfolder( $block['files'] );
+		$folders = Ubac_Cleanup_Scanner::by_subfolder( $block['files'] );
 
 		if ( count( $folders ) < 2 ) {
 			return;
@@ -936,7 +936,7 @@ class Dahu_File_Cleanup_Admin {
 			)
 		);
 
-		echo '<table class="widefat striped dahu-file-cleanup__subfolders"><thead><tr>';
+		echo '<table class="widefat striped ubac-cleanup__subfolders"><thead><tr>';
 		printf( '<th scope="col">%s</th>', esc_html__( 'Subfolder', 'ubac-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Files', 'ubac-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Size', 'ubac-cleanup' ) );
@@ -944,7 +944,7 @@ class Dahu_File_Cleanup_Admin {
 
 		foreach ( $folders as $folder => $totals ) {
 			printf(
-				'<tr><td><code class="dahu-file-cleanup__path">%1$s</code></td><td class="dahu-file-cleanup__num">%2$s</td><td class="dahu-file-cleanup__num">%3$s</td></tr>',
+				'<tr><td><code class="ubac-cleanup__path">%1$s</code></td><td class="ubac-cleanup__num">%2$s</td><td class="ubac-cleanup__num">%3$s</td></tr>',
 				esc_html( $folder ),
 				esc_html( number_format_i18n( $totals['count'] ) ),
 				esc_html( size_format( $totals['bytes'] ) )
@@ -962,7 +962,7 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_preview_files( $block ) {
 
-		echo '<table class="widefat striped dahu-file-cleanup__files"><thead><tr>';
+		echo '<table class="widefat striped ubac-cleanup__files"><thead><tr>';
 		printf( '<th scope="col">%s</th>', esc_html__( 'File', 'ubac-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Size', 'ubac-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Last modified', 'ubac-cleanup' ) );
@@ -970,8 +970,8 @@ class Dahu_File_Cleanup_Admin {
 
 		foreach ( $block['files'] as $file ) {
 			printf(
-				'<tr><td><code class="dahu-file-cleanup__path">%1$s</code></td><td class="dahu-file-cleanup__num">%2$s</td><td class="dahu-file-cleanup__num">%3$s</td></tr>',
-				esc_html( Dahu_File_Cleanup_Paths::shorten( $file['path'] ) ),
+				'<tr><td><code class="ubac-cleanup__path">%1$s</code></td><td class="ubac-cleanup__num">%2$s</td><td class="ubac-cleanup__num">%3$s</td></tr>',
+				esc_html( Ubac_Cleanup_Paths::shorten( $file['path'] ) ),
 				esc_html( size_format( $file['size'] ) ),
 				esc_html( wp_date( 'Y-m-d H:i', $file['mtime'] ) )
 			);
@@ -979,7 +979,7 @@ class Dahu_File_Cleanup_Admin {
 
 		if ( $block['truncated'] ) {
 			printf(
-				'<tr><td colspan="3" class="dahu-file-cleanup__muted">%s</td></tr>',
+				'<tr><td colspan="3" class="ubac-cleanup__muted">%s</td></tr>',
 				esc_html(
 					sprintf(
 						/* translators: %s: number of further files. */
@@ -1004,11 +1004,11 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Manual run', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Manual run', 'ubac-cleanup' ) );
 
 		if ( isset( self::$summary['locked'] ) ) {
 			printf(
-				'<p class="dahu-file-cleanup__warn">%s</p>',
+				'<p class="ubac-cleanup__warn">%s</p>',
 				esc_html__( 'Another run was already in progress, so nothing was done. Try again in a few minutes.', 'ubac-cleanup' )
 			);
 			echo '</div>';
@@ -1018,7 +1018,7 @@ class Dahu_File_Cleanup_Admin {
 
 		if ( ! self::$summary ) {
 			printf(
-				'<p class="dahu-file-cleanup__muted">%s</p>',
+				'<p class="ubac-cleanup__muted">%s</p>',
 				esc_html__( 'No rule is both switched on and complete, so nothing was deleted.', 'ubac-cleanup' )
 			);
 			echo '</div>';
@@ -1026,7 +1026,7 @@ class Dahu_File_Cleanup_Admin {
 			return;
 		}
 
-		echo '<table class="dahu-ui-table"><thead><tr>';
+		echo '<table class="ubac-ui-table"><thead><tr>';
 		printf( '<th scope="col">%s</th>', esc_html__( 'Rule', 'ubac-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Deleted', 'ubac-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Freed', 'ubac-cleanup' ) );
@@ -1051,7 +1051,7 @@ class Dahu_File_Cleanup_Admin {
 			}
 
 			printf(
-				'<tr><td>%1$s</td><td class="dahu-file-cleanup__num">%2$s</td><td class="dahu-file-cleanup__num">%3$s</td><td>%4$s</td></tr>',
+				'<tr><td>%1$s</td><td class="ubac-cleanup__num">%2$s</td><td class="ubac-cleanup__num">%3$s</td><td>%4$s</td></tr>',
 				esc_html( $result['label'] ),
 				esc_html( number_format_i18n( $result['deleted'] ) ),
 				esc_html( size_format( $result['bytes'] ) ),
@@ -1069,14 +1069,14 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function render_log() {
 
-		$rows  = Dahu_File_Cleanup_Log::all();
+		$rows  = Ubac_Cleanup_Log::all();
 		$shown = array_slice( $rows, 0, 50 );
 
-		printf( '<div class="dahu-ui-card"><div class="dahu-ui-card__head"><h2 class="dahu-ui-card__title">%s</h2></div>', esc_html__( 'Log', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Log', 'ubac-cleanup' ) );
 
 		if ( ! $rows ) {
 			printf(
-				'<p class="dahu-ui-hint">%s</p>',
+				'<p class="ubac-ui-hint">%s</p>',
 				esc_html__( 'Nothing has run yet. A row is written for every rule on every run, including runs that deleted nothing.', 'ubac-cleanup' )
 			);
 			echo '</div>';
@@ -1090,7 +1090,7 @@ class Dahu_File_Cleanup_Admin {
 			'cli'       => __( 'WP-CLI', 'ubac-cleanup' ),
 		);
 
-		echo '<table class="widefat striped dahu-file-cleanup__log"><thead><tr>';
+		echo '<table class="widefat striped ubac-cleanup__log"><thead><tr>';
 		printf( '<th scope="col">%s</th>', esc_html__( 'When', 'ubac-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Started by', 'ubac-cleanup' ) );
 		printf( '<th scope="col">%s</th>', esc_html__( 'Rule', 'ubac-cleanup' ) );
@@ -1102,12 +1102,12 @@ class Dahu_File_Cleanup_Admin {
 			$mode = isset( $row['mode'] ) && isset( $modes[ $row['mode'] ] ) ? $modes[ $row['mode'] ] : (string) ( isset( $row['mode'] ) ? $row['mode'] : '' );
 
 			printf(
-				'<tr><td class="dahu-file-cleanup__num">%1$s</td><td>%2$s</td><td>%3$s</td><td class="dahu-file-cleanup__num">%4$s%5$s</td><td class="dahu-file-cleanup__num">%6$s</td></tr>',
+				'<tr><td class="ubac-cleanup__num">%1$s</td><td>%2$s</td><td>%3$s</td><td class="ubac-cleanup__num">%4$s%5$s</td><td class="ubac-cleanup__num">%6$s</td></tr>',
 				esc_html( wp_date( 'Y-m-d H:i', (int) ( isset( $row['time'] ) ? $row['time'] : 0 ) ) ),
 				esc_html( $mode ),
 				esc_html( (string) ( isset( $row['label'] ) && '' !== $row['label'] ? $row['label'] : ( isset( $row['rule'] ) ? $row['rule'] : '' ) ) ),
 				esc_html( number_format_i18n( (int) ( isset( $row['files'] ) ? $row['files'] : 0 ) ) ),
-				empty( $row['capped'] ) ? '' : ' <span class="dahu-file-cleanup__warn">' . esc_html__( '(ceiling)', 'ubac-cleanup' ) . '</span>',
+				empty( $row['capped'] ) ? '' : ' <span class="ubac-cleanup__warn">' . esc_html__( '(ceiling)', 'ubac-cleanup' ) . '</span>',
 				esc_html( size_format( (int) ( isset( $row['bytes'] ) ? $row['bytes'] : 0 ) ) )
 			);
 		}
@@ -1116,7 +1116,7 @@ class Dahu_File_Cleanup_Admin {
 
 		if ( count( $rows ) > count( $shown ) ) {
 			printf(
-				'<p class="dahu-file-cleanup__muted">%s</p>',
+				'<p class="ubac-cleanup__muted">%s</p>',
 				esc_html(
 					sprintf(
 						/* translators: 1: rows shown, 2: rows kept in total. */
@@ -1128,10 +1128,10 @@ class Dahu_File_Cleanup_Admin {
 			);
 		}
 
-		printf( '<form method="post" action="%s" class="dahu-file-cleanup__clear">', esc_url( self::screen_url() ) );
-		wp_nonce_field( 'dahu_file_cleanup_clear_log' );
-		echo '<input type="hidden" name="dahu_file_cleanup_action" value="clear-log">';
-		printf( '<button type="submit" class="button-link dahu-file-cleanup__delete">%s</button>', esc_html__( 'Clear the log', 'ubac-cleanup' ) );
+		printf( '<form method="post" action="%s" class="ubac-cleanup__clear">', esc_url( self::screen_url() ) );
+		wp_nonce_field( 'ubac_cleanup_clear_log' );
+		echo '<input type="hidden" name="ubac_cleanup_action" value="clear-log">';
+		printf( '<button type="submit" class="button-link ubac-cleanup__delete">%s</button>', esc_html__( 'Clear the log', 'ubac-cleanup' ) );
 		echo '</form></div>';
 	}
 
@@ -1142,6 +1142,6 @@ class Dahu_File_Cleanup_Admin {
 	 */
 	private static function screen_url() {
 
-		return admin_url( 'tools.php?page=' . DAHU_FILE_CLEANUP_PAGE );
+		return admin_url( 'tools.php?page=' . UBAC_CLEANUP_PAGE );
 	}
 }

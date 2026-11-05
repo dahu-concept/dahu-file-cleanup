@@ -1,4 +1,4 @@
-# Dahu File Cleanup
+# Ubac File Cleanup
 
 A retention policy for the generated files that pile up on a WordPress server:
 named rules with their own folders, extensions and maximum age, a dry run that
@@ -142,7 +142,7 @@ until somebody has decided how long an invoice is kept.
 Add your own:
 
 ```php
-add_filter( 'dahu_file_cleanup_presets', function ( $presets ) {
+add_filter( 'ubac_cleanup_presets', function ( $presets ) {
 	$presets['my_exports'] = array(
 		'label'      => 'Nightly exports',
 		'paths'      => 'wp-content/uploads/my-exports',
@@ -161,12 +161,12 @@ add_filter( 'dahu_file_cleanup_presets', function ( $presets ) {
 // Keep one file. Called for every selected file during a real run — never
 // during the dry run, so a filter that keeps files makes the preview
 // optimistic.
-add_filter( 'dahu_file_cleanup_delete_file', function ( $delete, $file, $rule_key, $rule ) {
+add_filter( 'ubac_cleanup_delete_file', function ( $delete, $file, $rule_key, $rule ) {
 	return $delete;
 }, 10, 4 );
 
 // After a run, scheduled or manual.
-add_action( 'dahu_file_cleanup_after_run', function ( $summary, $mode ) {}, 10, 2 );
+add_action( 'ubac_cleanup_after_run', function ( $summary, $mode ) {}, 10, 2 );
 ```
 
 ## The log
@@ -175,7 +175,7 @@ One row per rule per run, newest first, two hundred rows kept, in an option
 that is **not** autoloaded. Counts, not filenames: a list of every deleted file
 would be the most useful log imaginable and also an option that grows without
 bound on a site deleting thousands of files a night, read on every request.
-Per-file accounting is what `dahu_file_cleanup_delete_file` is for.
+Per-file accounting is what `ubac_cleanup_delete_file` is for.
 
 ## Uninstalling
 

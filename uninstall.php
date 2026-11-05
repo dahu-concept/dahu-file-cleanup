@@ -12,7 +12,7 @@
  * and the setting is off by default: uninstalling is often a step in
  * reinstalling, and the log is the only record of what was deleted.
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
@@ -22,48 +22,48 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
  *
  * @return void
  */
-function dahu_file_cleanup_uninstall_site() {
+function ubac_cleanup_uninstall_site() {
 
 	// The welcome screen's own three flags.
 	//
 	// They are interface state, not the shop's data, which is why they sit
 	// BEFORE any “remove data on uninstall” guard: whatever a shop chose to
-	// keep, a reinstall has to greet it again. `includes/dahu-welcome.php`
+	// keep, a reinstall has to greet it again. `includes/ubac-welcome.php`
 	// writes them with update_option(), so they outlive the plugin unless
 	// they are deleted here — and the welcome screen and the guided tour
 	// would then stay silent for good, with nothing on screen to explain why.
-	delete_option( 'dahu_welcome_seen_dahu-file-cleanup' );
-	delete_option( 'dahu_welcome_pending_dahu-file-cleanup' );
-	delete_option( 'dahu_welcome_tour_dahu-file-cleanup' );
+	delete_option( 'ubac_welcome_seen_ubac-cleanup' );
+	delete_option( 'ubac_welcome_pending_ubac-cleanup' );
+	delete_option( 'ubac_welcome_tour_ubac-cleanup' );
 
-	wp_clear_scheduled_hook( 'dahu_file_cleanup_daily' );
-	delete_transient( 'dahu_file_cleanup_running' );
+	wp_clear_scheduled_hook( 'ubac_cleanup_daily' );
+	delete_transient( 'ubac_cleanup_running' );
 
-	$settings = get_option( 'dahu_file_cleanup_settings', array() );
+	$settings = get_option( 'ubac_cleanup_settings', array() );
 
 	if ( ! is_array( $settings ) || empty( $settings['delete_data_on_uninstall'] ) ) {
 		return;
 	}
 
-	delete_option( 'dahu_file_cleanup_settings' );
-	delete_option( 'dahu_file_cleanup_log' );
+	delete_option( 'ubac_cleanup_settings' );
+	delete_option( 'ubac_cleanup_log' );
 }
 
 if ( is_multisite() ) {
-	$dahu_file_cleanup_sites = get_sites(
+	$ubac_cleanup_sites = get_sites(
 		array(
 			'fields' => 'ids',
 			'number' => 0,
 		)
 	);
 
-	foreach ( $dahu_file_cleanup_sites as $dahu_file_cleanup_site ) {
-		switch_to_blog( $dahu_file_cleanup_site );
-		dahu_file_cleanup_uninstall_site();
+	foreach ( $ubac_cleanup_sites as $ubac_cleanup_site ) {
+		switch_to_blog( $ubac_cleanup_site );
+		ubac_cleanup_uninstall_site();
 		restore_current_blog();
 	}
 
-	unset( $dahu_file_cleanup_sites, $dahu_file_cleanup_site );
+	unset( $ubac_cleanup_sites, $ubac_cleanup_site );
 } else {
-	dahu_file_cleanup_uninstall_site();
+	ubac_cleanup_uninstall_site();
 }

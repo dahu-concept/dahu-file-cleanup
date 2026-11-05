@@ -8,7 +8,7 @@
  * that is what keeps "delete files older than N days in this folder" from
  * ever meaning "delete everything in this folder".
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Rules: their shape, and what a valid one is.
  */
-class Dahu_File_Cleanup_Rules {
+class Ubac_Cleanup_Rules {
 
 	/**
 	 * Longest rule key, to stay well inside any option-size concern.
@@ -46,7 +46,7 @@ class Dahu_File_Cleanup_Rules {
 	 *
 	 * Code, scripts, stylesheets, markup, server configuration and
 	 * translations. The folders that normally hold these are refused by
-	 * Dahu_File_Cleanup_Paths already; this is the second half of the same
+	 * Ubac_Cleanup_Paths already; this is the second half of the same
 	 * idea, for a code file that has found its way into an uploads folder —
 	 * which, when it happens, is either a mistake worth seeing or a shell
 	 * worth keeping as evidence, and in neither case something to delete on
@@ -442,6 +442,6 @@ class Dahu_File_Cleanup_Rules {
 		 *
 		 * @param array<string,array<string,mixed>> $presets Presets.
 		 */
-		return (array) apply_filters( 'dahu_file_cleanup_presets', $presets );
+		return (array) apply_filters( 'ubac_cleanup_presets', $presets );
 	}
 }

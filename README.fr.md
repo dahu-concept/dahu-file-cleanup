@@ -1,4 +1,4 @@
-# Dahu File Cleanup
+# Ubac File Cleanup
 
 Une politique de conservation pour les fichiers générés qui s'accumulent sur un
 serveur WordPress : des règles nommées avec leurs dossiers, leurs extensions et
@@ -158,7 +158,7 @@ quelqu'un ait décidé combien de temps une facture est conservée.
 Ajouter les vôtres :
 
 ```php
-add_filter( 'dahu_file_cleanup_presets', function ( $presets ) {
+add_filter( 'ubac_cleanup_presets', function ( $presets ) {
 	$presets['my_exports'] = array(
 		'label'      => 'Exports nocturnes',
 		'paths'      => 'wp-content/uploads/my-exports',
@@ -177,12 +177,12 @@ add_filter( 'dahu_file_cleanup_presets', function ( $presets ) {
 // Conserver un fichier. Appelé pour chaque fichier sélectionné lors d'une
 // vraie exécution — jamais pendant l'aperçu, donc un filtre qui conserve des
 // fichiers rend l'aperçu optimiste.
-add_filter( 'dahu_file_cleanup_delete_file', function ( $delete, $file, $rule_key, $rule ) {
+add_filter( 'ubac_cleanup_delete_file', function ( $delete, $file, $rule_key, $rule ) {
 	return $delete;
 }, 10, 4 );
 
 // Après une exécution, programmée ou manuelle.
-add_action( 'dahu_file_cleanup_after_run', function ( $summary, $mode ) {}, 10, 2 );
+add_action( 'ubac_cleanup_after_run', function ( $summary, $mode ) {}, 10, 2 );
 ```
 
 ## Le journal
@@ -193,7 +193,7 @@ noms de fichiers : la liste de chaque fichier supprimé serait le journal le plu
 utile du monde et aussi une option qui grossit sans limite sur un site qui
 supprime des milliers de fichiers par nuit, lue à chaque requête. La
 comptabilité fichier par fichier, c'est à quoi sert
-`dahu_file_cleanup_delete_file`.
+`ubac_cleanup_delete_file`.
 
 ## À la désinstallation
 

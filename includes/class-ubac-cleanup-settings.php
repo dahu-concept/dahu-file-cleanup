@@ -11,7 +11,7 @@
  * nothing about the site: the scheduled event fires nightly over an empty
  * list. A plugin that deletes files has no business guessing which ones.
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -19,17 +19,17 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Settings storage.
  */
-class Dahu_File_Cleanup_Settings {
+class Ubac_Cleanup_Settings {
 
 	/**
 	 * Option name.
 	 */
-	const OPTION = 'dahu_file_cleanup_settings';
+	const OPTION = 'ubac_cleanup_settings';
 
 	/**
 	 * Option group, for the Settings API.
 	 */
-	const GROUP = 'dahu_file_cleanup';
+	const GROUP = 'ubac_cleanup';
 
 	/**
 	 * Default ceiling on files deleted per rule per run.
@@ -94,7 +94,7 @@ class Dahu_File_Cleanup_Settings {
 					continue;
 				}
 
-				$settings['rules'][ $key ] = Dahu_File_Cleanup_Rules::normalise( $rule );
+				$settings['rules'][ $key ] = Ubac_Cleanup_Rules::normalise( $rule );
 			}
 		}
 
@@ -169,7 +169,7 @@ class Dahu_File_Cleanup_Settings {
 				continue;
 			}
 
-			if ( Dahu_File_Cleanup_Rules::blockers( $rule ) ) {
+			if ( Ubac_Cleanup_Rules::blockers( $rule ) ) {
 				continue;
 			}
 
@@ -260,7 +260,7 @@ class Dahu_File_Cleanup_Settings {
 				continue;
 			}
 
-			$key = Dahu_File_Cleanup_Rules::make_key( $label, array_keys( $output['rules'] ) );
+			$key = Ubac_Cleanup_Rules::make_key( $label, array_keys( $output['rules'] ) );
 
 			$output['rules'][ $key ] = self::sanitize_rule( $row );
 		}
@@ -275,7 +275,7 @@ class Dahu_File_Cleanup_Settings {
 				continue;
 			}
 
-			if ( Dahu_File_Cleanup_Rules::blockers( $rule ) ) {
+			if ( Ubac_Cleanup_Rules::blockers( $rule ) ) {
 				$output['rules'][ $key ]['enabled'] = false;
 			}
 		}
@@ -293,7 +293,7 @@ class Dahu_File_Cleanup_Settings {
 	 */
 	private static function sanitize_rule( $row ) {
 
-		$extensions = Dahu_File_Cleanup_Rules::normalise_extensions( isset( $row['extensions'] ) ? $row['extensions'] : '' );
+		$extensions = Ubac_Cleanup_Rules::normalise_extensions( isset( $row['extensions'] ) ? $row['extensions'] : '' );
 
 		if ( $extensions['refused'] ) {
 			self::remember_refused_extensions( $extensions['refused'] );
@@ -301,9 +301,9 @@ class Dahu_File_Cleanup_Settings {
 
 		return array(
 			'label'      => isset( $row['label'] ) ? sanitize_text_field( (string) $row['label'] ) : '',
-			'paths'      => Dahu_File_Cleanup_Rules::normalise_paths( isset( $row['paths'] ) ? $row['paths'] : '' ),
+			'paths'      => Ubac_Cleanup_Rules::normalise_paths( isset( $row['paths'] ) ? $row['paths'] : '' ),
 			'extensions' => $extensions['extensions'],
-			'days'       => Dahu_File_Cleanup_Rules::normalise_days( isset( $row['days'] ) ? $row['days'] : '' ),
+			'days'       => Ubac_Cleanup_Rules::normalise_days( isset( $row['days'] ) ? $row['days'] : '' ),
 			'recursive'  => ! empty( $row['recursive'] ),
 			'enabled'    => ! empty( $row['enabled'] ),
 		);
@@ -325,7 +325,7 @@ class Dahu_File_Cleanup_Settings {
 		foreach ( $refused as $extension => $reason ) {
 			add_settings_error(
 				self::OPTION,
-				'dahu-file-cleanup-extension-' . sanitize_key( $extension ),
+				'ubac-cleanup-extension-' . sanitize_key( $extension ),
 				sprintf(
 					/* translators: 1: file extension, 2: reason it was refused. */
 					__( 'Extension “%1$s” was not kept: %2$s', 'ubac-cleanup' ),

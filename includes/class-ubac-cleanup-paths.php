@@ -18,7 +18,7 @@
  * 3. No wildcards, ever. Selection is by file extension, declared on the
  *    rule; a path is a place, not a pattern.
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Validates the folders a rule may target.
  */
-class Dahu_File_Cleanup_Paths {
+class Ubac_Cleanup_Paths {
 
 	/**
 	 * Validate one path.

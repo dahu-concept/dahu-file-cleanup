@@ -13,7 +13,7 @@
  * against the rule's list again, immediately before it is removed. If any of
  * that disagrees, the file stays.
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -21,12 +21,12 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Executes rules.
  */
-class Dahu_File_Cleanup_Runner {
+class Ubac_Cleanup_Runner {
 
 	/**
 	 * Name of the best-effort lock.
 	 */
-	const LOCK = 'dahu_file_cleanup_running';
+	const LOCK = 'ubac_cleanup_running';
 
 	/**
 	 * How long the lock survives a run that died halfway.
@@ -107,8 +107,8 @@ class Dahu_File_Cleanup_Runner {
 
 		set_transient( self::LOCK, time(), self::LOCK_TTL );
 
-		$settings = Dahu_File_Cleanup_Settings::get();
-		$rules    = Dahu_File_Cleanup_Settings::runnable_rules();
+		$settings = Ubac_Cleanup_Settings::get();
+		$rules    = Ubac_Cleanup_Settings::runnable_rules();
 		$ceiling  = (int) $settings['max_per_run'];
 		$summary  = array();
 
@@ -129,7 +129,7 @@ class Dahu_File_Cleanup_Runner {
 		 * @param array<string,mixed> $summary Per-rule results.
 		 * @param string              $mode    How the run was started.
 		 */
-		do_action( 'dahu_file_cleanup_after_run', $summary, $mode );
+		do_action( 'ubac_cleanup_after_run', $summary, $mode );
 
 		return $summary;
 	}
@@ -154,7 +154,7 @@ class Dahu_File_Cleanup_Runner {
 		$ceiling = max( 1, (int) $ceiling );
 		$budget  = $ceiling * self::WORK_PER_DELETION;
 
-		$diagnostics = Dahu_File_Cleanup_Scanner::walk(
+		$diagnostics = Ubac_Cleanup_Scanner::walk(
 			$rule,
 			static function ( $file ) use ( $key, $rule, $ceiling, &$deleted, &$bytes, &$failed, &$capped ) {
 
@@ -171,7 +171,7 @@ class Dahu_File_Cleanup_Runner {
 				 * @param string              $key    Rule key.
 				 * @param array<string,mixed> $rule   The rule.
 				 */
-				$allowed = apply_filters( 'dahu_file_cleanup_delete_file', true, $file, $key, $rule );
+				$allowed = apply_filters( 'ubac_cleanup_delete_file', true, $file, $key, $rule );
 
 				if ( $allowed ) {
 					if ( self::delete_file( $file['path'], $file['root'], $rule['extensions'] ) ) {
@@ -217,7 +217,7 @@ class Dahu_File_Cleanup_Runner {
 
 		$capped = '' !== $reason;
 
-		Dahu_File_Cleanup_Log::add(
+		Ubac_Cleanup_Log::add(
 			array(
 				'mode'    => $mode,
 				'rule'    => $key,
@@ -307,7 +307,7 @@ class Dahu_File_Cleanup_Runner {
 		// the settings refuse it — but this function is public API for the
 		// CLI command and for anything the filters above hand it, and the
 		// last line of defence is worth more than the microsecond.
-		if ( in_array( $extension, Dahu_File_Cleanup_Rules::forbidden_extensions(), true ) ) {
+		if ( in_array( $extension, Ubac_Cleanup_Rules::forbidden_extensions(), true ) ) {
 			return false;
 		}
 
@@ -345,7 +345,7 @@ class Dahu_File_Cleanup_Runner {
 	private static function root_is_valid( $root ) {
 
 		if ( ! isset( self::$valid_roots[ $root ] ) ) {
-			$validation                 = Dahu_File_Cleanup_Paths::validate( $root );
+			$validation                 = Ubac_Cleanup_Paths::validate( $root );
 			self::$valid_roots[ $root ] = ( $validation['ok'] && $validation['path'] === $root );
 		}
 

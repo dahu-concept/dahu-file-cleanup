@@ -16,7 +16,7 @@
  * a dry run that lists files it will not delete is worse than useless, because
  * it is the screen people trust before switching a rule on.
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Finds the files a rule selects.
  */
-class Dahu_File_Cleanup_Scanner {
+class Ubac_Cleanup_Scanner {
 
 	/**
 	 * Volume above which "many candidates, none old enough" stops looking
@@ -98,7 +98,7 @@ class Dahu_File_Cleanup_Scanner {
 	 */
 	public static function walk( $rule, $visitor, $work_ceiling = 0 ) {
 
-		$rule        = Dahu_File_Cleanup_Rules::normalise( $rule );
+		$rule        = Ubac_Cleanup_Rules::normalise( $rule );
 		$diagnostics = array();
 		$extensions  = $rule['extensions'];
 
@@ -115,7 +115,7 @@ class Dahu_File_Cleanup_Scanner {
 		$work_ceiling = max( 0, (int) $work_ceiling );
 		$examined     = 0;
 
-		foreach ( Dahu_File_Cleanup_Rules::path_lines( $rule ) as $line ) {
+		foreach ( Ubac_Cleanup_Rules::path_lines( $rule ) as $line ) {
 
 			$diagnostic = array(
 				'line'       => $line,
@@ -133,7 +133,7 @@ class Dahu_File_Cleanup_Scanner {
 				'exhausted'  => '',
 			);
 
-			$validation = Dahu_File_Cleanup_Paths::validate( $line );
+			$validation = Ubac_Cleanup_Paths::validate( $line );
 
 			if ( ! $validation['ok'] ) {
 				$diagnostic['reason'] = $validation['reason'];
@@ -200,7 +200,7 @@ class Dahu_File_Cleanup_Scanner {
 					}
 
 					if ( $entry->isDir() ) {
-						if ( $recursive && $depth < Dahu_File_Cleanup_Rules::MAX_DEPTH ) {
+						if ( $recursive && $depth < Ubac_Cleanup_Rules::MAX_DEPTH ) {
 							$stack[] = array( $entry->getPathname(), $depth + 1 );
 						}
 						continue;
@@ -235,13 +235,13 @@ class Dahu_File_Cleanup_Scanner {
 					}
 
 					$pathname = wp_normalize_path( $entry->getPathname() );
-					$resolved = Dahu_File_Cleanup_Paths::resolve( dirname( $pathname ) );
+					$resolved = Ubac_Cleanup_Paths::resolve( dirname( $pathname ) );
 
 					// Belt to the symlink braces: even reached through a
 					// link this plugin does not follow, a file whose own
 					// directory resolves outside the validated root is not
 					// this rule's business.
-					if ( '' === $resolved || ( $resolved !== $root && ! Dahu_File_Cleanup_Paths::inside( $resolved, $root ) ) ) {
+					if ( '' === $resolved || ( $resolved !== $root && ! Ubac_Cleanup_Paths::inside( $resolved, $root ) ) ) {
 						continue;
 					}
 
@@ -308,7 +308,7 @@ class Dahu_File_Cleanup_Scanner {
 			 * @param int                 $budget Entries the dry run may inspect.
 			 * @param array<string,mixed> $rule   The rule being previewed.
 			 */
-			$work_ceiling = apply_filters( 'dahu_file_cleanup_preview_work_budget', self::PREVIEW_WORK_BUDGET, $rule );
+			$work_ceiling = apply_filters( 'ubac_cleanup_preview_work_budget', self::PREVIEW_WORK_BUDGET, $rule );
 		}
 
 		$work_ceiling = max( 0, (int) $work_ceiling );

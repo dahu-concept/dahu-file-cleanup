@@ -1,5 +1,5 @@
 === Ubac File Cleanup ===
-Contributors: dahuconcept
+Contributors: ubacconcept
 Tags: housekeeping, old files, data retention, cleanup, cron
 Requires at least: 6.0
 Tested up to: 7.1
@@ -16,7 +16,7 @@ Invoice PDFs, shipping labels, quote PDFs, backup archives, export files, debug
 logs. Plugins generate them, nobody deletes them, and a year later the disk is
 full of documents that were useful for a week.
 
-Dahu File Cleanup lets you write the policy once, in words, and runs it every
+Ubac File Cleanup lets you write the policy once, in words, and runs it every
 night.
 
 = A rule =

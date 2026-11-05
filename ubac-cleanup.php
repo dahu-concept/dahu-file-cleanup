@@ -12,17 +12,17 @@
  * Requires at least: 6.0
  * Requires PHP:      7.4
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'DAHU_FILE_CLEANUP_VERSION', '1.1.1' );
-define( 'DAHU_FILE_CLEANUP_FILE', __FILE__ );
-define( 'DAHU_FILE_CLEANUP_PATH', plugin_dir_path( __FILE__ ) );
-define( 'DAHU_FILE_CLEANUP_URL', plugin_dir_url( __FILE__ ) );
-define( 'DAHU_FILE_CLEANUP_PAGE', 'dahu-file-cleanup' );
-define( 'DAHU_FILE_CLEANUP_CRON', 'dahu_file_cleanup_daily' );
+define( 'UBAC_CLEANUP_VERSION', '1.1.1' );
+define( 'UBAC_CLEANUP_FILE', __FILE__ );
+define( 'UBAC_CLEANUP_PATH', plugin_dir_path( __FILE__ ) );
+define( 'UBAC_CLEANUP_URL', plugin_dir_url( __FILE__ ) );
+define( 'UBAC_CLEANUP_PAGE', 'ubac-cleanup' );
+define( 'UBAC_CLEANUP_CRON', 'ubac_cleanup_daily' );
 
 /* -------------------------------------------------------------------------
  * Translations
@@ -38,21 +38,21 @@ define( 'DAHU_FILE_CLEANUP_CRON', 'dahu_file_cleanup_daily' );
  * Bootstrap
  * ---------------------------------------------------------------------- */
 
-require_once DAHU_FILE_CLEANUP_PATH . 'includes/class-dahu-file-cleanup-settings.php';
-require_once DAHU_FILE_CLEANUP_PATH . 'includes/class-dahu-file-cleanup-rules.php';
-require_once DAHU_FILE_CLEANUP_PATH . 'includes/class-dahu-file-cleanup-paths.php';
-require_once DAHU_FILE_CLEANUP_PATH . 'includes/class-dahu-file-cleanup-scanner.php';
-require_once DAHU_FILE_CLEANUP_PATH . 'includes/class-dahu-file-cleanup-runner.php';
-require_once DAHU_FILE_CLEANUP_PATH . 'includes/class-dahu-file-cleanup-log.php';
+require_once UBAC_CLEANUP_PATH . 'includes/class-ubac-cleanup-settings.php';
+require_once UBAC_CLEANUP_PATH . 'includes/class-ubac-cleanup-rules.php';
+require_once UBAC_CLEANUP_PATH . 'includes/class-ubac-cleanup-paths.php';
+require_once UBAC_CLEANUP_PATH . 'includes/class-ubac-cleanup-scanner.php';
+require_once UBAC_CLEANUP_PATH . 'includes/class-ubac-cleanup-runner.php';
+require_once UBAC_CLEANUP_PATH . 'includes/class-ubac-cleanup-log.php';
 
 if ( is_admin() ) {
-	require_once DAHU_FILE_CLEANUP_PATH . 'includes/class-dahu-file-cleanup-admin.php';
-	Dahu_File_Cleanup_Admin::init();
+	require_once UBAC_CLEANUP_PATH . 'includes/class-ubac-cleanup-admin.php';
+	Ubac_Cleanup_Admin::init();
 }
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	require_once DAHU_FILE_CLEANUP_PATH . 'includes/class-dahu-file-cleanup-cli.php';
-	Dahu_File_Cleanup_CLI::init();
+	require_once UBAC_CLEANUP_PATH . 'includes/class-ubac-cleanup-cli.php';
+	Ubac_Cleanup_CLI::init();
 }
 
 /* -------------------------------------------------------------------------
@@ -64,9 +64,9 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  * ---------------------------------------------------------------------- */
 
 add_action(
-	DAHU_FILE_CLEANUP_CRON,
+	UBAC_CLEANUP_CRON,
 	static function () {
-		Dahu_File_Cleanup_Runner::run( 'scheduled' );
+		Ubac_Cleanup_Runner::run( 'scheduled' );
 	}
 );
 
@@ -81,9 +81,9 @@ add_action(
  *
  * @return void
  */
-function dahu_file_cleanup_schedule() {
+function ubac_cleanup_schedule() {
 
-	if ( wp_next_scheduled( DAHU_FILE_CLEANUP_CRON ) ) {
+	if ( wp_next_scheduled( UBAC_CLEANUP_CRON ) ) {
 		return;
 	}
 
@@ -93,22 +93,22 @@ function dahu_file_cleanup_schedule() {
 	$at    = (int) strtotime( 'tomorrow 03:00', $now );
 	$delay = max( HOUR_IN_SECONDS, $at - $now );
 
-	wp_schedule_event( time() + $delay, 'daily', DAHU_FILE_CLEANUP_CRON );
+	wp_schedule_event( time() + $delay, 'daily', UBAC_CLEANUP_CRON );
 }
 
-add_action( 'admin_init', 'dahu_file_cleanup_schedule' );
+add_action( 'admin_init', 'ubac_cleanup_schedule' );
 
 register_activation_hook(
 	__FILE__,
 	static function () {
-		dahu_file_cleanup_schedule();
+		ubac_cleanup_schedule();
 	}
 );
 
 register_deactivation_hook(
 	__FILE__,
 	static function () {
-		wp_clear_scheduled_hook( DAHU_FILE_CLEANUP_CRON );
+		wp_clear_scheduled_hook( UBAC_CLEANUP_CRON );
 	}
 );
 
@@ -122,7 +122,7 @@ add_filter(
 
 		$settings = sprintf(
 			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'tools.php?page=' . DAHU_FILE_CLEANUP_PAGE ) ),
+			esc_url( admin_url( 'tools.php?page=' . UBAC_CLEANUP_PAGE ) ),
 			esc_html__( 'Rules', 'ubac-cleanup' )
 		);
 
@@ -158,7 +158,7 @@ add_filter(
  * Registered here rather than inside the admin include, because the
  * activation flag has to be set whatever else is loaded.
  */
-require_once DAHU_FILE_CLEANUP_PATH . 'includes/dahu-welcome.php';
+require_once UBAC_CLEANUP_PATH . 'includes/ubac-welcome.php';
 
 /*
  * The flag, not a redirect: an activation hook that redirects breaks bulk
@@ -169,21 +169,21 @@ require_once DAHU_FILE_CLEANUP_PATH . 'includes/dahu-welcome.php';
 register_activation_hook(
 	__FILE__,
 	static function () {
-		Dahu_Welcome::mark_activated( 'dahu-file-cleanup' );
+		Ubac_Welcome::mark_activated( 'ubac-cleanup' );
 	}
 );
 
 add_action(
 	'init',
 	static function () {
-		Dahu_Welcome::register(
+		Ubac_Welcome::register(
 			array(
-				'slug'       => 'dahu-file-cleanup',
+				'slug'       => 'ubac-cleanup',
 				'name'       => __( 'File cleanup', 'ubac-cleanup' ),
 				'tagline'    => __( 'Finds uploaded files no longer attached to anything.', 'ubac-cleanup' ),
-				'file'       => DAHU_FILE_CLEANUP_FILE,
-				'version'    => DAHU_FILE_CLEANUP_VERSION,
-				'textdomain' => 'dahu-file-cleanup',
+				'file'       => UBAC_CLEANUP_FILE,
+				'version'    => UBAC_CLEANUP_VERSION,
+				'textdomain' => 'ubac-cleanup',
 				'mark'       => array(
 					'view'  => '0 0 112 112',
 					'paths' => array(
@@ -230,20 +230,20 @@ add_action(
 				 * rules now" button, the dry-run result and the log table are
 				 * not, and are deliberately left out.
 				 */
-				'tour_screen' => 'tools_page_dahu-file-cleanup',
+				'tour_screen' => 'tools_page_ubac-cleanup',
 				'tour'        => array(
 					array(
-						'selector' => '#dahu-file-cleanup-__new-paths',
+						'selector' => '#ubac-cleanup-__new-paths',
 						'title'    => __( 'Name the folders', 'ubac-cleanup' ),
 						'text'     => __( 'One per line. Only the folders you list are ever looked at.', 'ubac-cleanup' ),
 					),
 					array(
-						'selector' => '#dahu-file-cleanup-ceiling',
+						'selector' => '#ubac-cleanup-ceiling',
 						'title'    => __( 'A safety ceiling', 'ubac-cleanup' ),
 						'text'     => __( 'A run stops after this many files, and says so in the log.', 'ubac-cleanup' ),
 					),
 					array(
-						'selector' => '.dahu-file-cleanup__actions',
+						'selector' => '.ubac-cleanup__actions',
 						'title'    => __( 'Look before deleting', 'ubac-cleanup' ),
 						'text'     => __( 'The dry run lists what a rule would remove, and removes nothing.', 'ubac-cleanup' ),
 					),

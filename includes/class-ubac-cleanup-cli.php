@@ -13,7 +13,7 @@
  * server by default, when its name is a verb somebody might type to see what
  * it does, is a bad command.
  *
- * @package DahuFileCleanup
+ * @package UbacCleanup
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Registers the CLI commands.
  */
-class Dahu_File_Cleanup_CLI {
+class Ubac_Cleanup_CLI {
 
 	/**
 	 * Hook the command up.
@@ -48,7 +48,7 @@ class Dahu_File_Cleanup_CLI {
 	 */
 	public function rules() {
 
-		$rules = Dahu_File_Cleanup_Settings::rules();
+		$rules = Ubac_Cleanup_Settings::rules();
 
 		if ( ! $rules ) {
 			WP_CLI::log( 'No rules. Nothing would be deleted.' );
@@ -59,12 +59,12 @@ class Dahu_File_Cleanup_CLI {
 		$table = array();
 
 		foreach ( $rules as $key => $rule ) {
-			$blockers = Dahu_File_Cleanup_Rules::blockers( $rule );
+			$blockers = Ubac_Cleanup_Rules::blockers( $rule );
 
 			$table[] = array(
 				'key'        => $key,
 				'label'      => $rule['label'],
-				'folders'    => count( Dahu_File_Cleanup_Rules::path_lines( $rule ) ),
+				'folders'    => count( Ubac_Cleanup_Rules::path_lines( $rule ) ),
 				'extensions' => implode( ' ', $rule['extensions'] ),
 				'days'       => '' === $rule['days'] ? '-' : $rule['days'],
 				'recursive'  => $rule['recursive'] ? 'yes' : 'no',
@@ -112,13 +112,13 @@ class Dahu_File_Cleanup_CLI {
 			// because somebody is waiting in front of it and a request has an
 			// execution limit; the command line is neither, and an operator
 			// who typed this wants the true total however long it takes.
-			$preview = Dahu_File_Cleanup_Scanner::preview( $rule, 200, 0 );
+			$preview = Ubac_Cleanup_Scanner::preview( $rule, 200, 0 );
 
 			WP_CLI::log( '' );
 			WP_CLI::log( sprintf( '%s  [%s]  %s', $rule['label'], $key, $rule['enabled'] ? 'enabled' : 'disabled' ) );
 			WP_CLI::log( str_repeat( '-', 60 ) );
 
-			foreach ( Dahu_File_Cleanup_Rules::blockers( $rule ) as $blocker ) {
+			foreach ( Ubac_Cleanup_Rules::blockers( $rule ) as $blocker ) {
 				WP_CLI::log( '  cannot run: ' . $blocker );
 			}
 
@@ -142,13 +142,13 @@ class Dahu_File_Cleanup_CLI {
 
 			WP_CLI::log( sprintf( '  => %d file(s), %s', $preview['count'], size_format( $preview['bytes'] ) ) );
 
-			if ( Dahu_File_Cleanup_Scanner::looks_like_reset_timestamps( $preview['diagnostics'] ) ) {
+			if ( Ubac_Cleanup_Scanner::looks_like_reset_timestamps( $preview['diagnostics'] ) ) {
 				WP_CLI::warning( 'Many candidate files, none old enough. Modification times may have been reset by a clone or a restore.' );
 			}
 
 			if ( $show_files ) {
 				foreach ( $preview['files'] as $file ) {
-					WP_CLI::log( sprintf( '     %s  %s  %s', Dahu_File_Cleanup_Paths::shorten( $file['path'] ), size_format( $file['size'] ), gmdate( 'Y-m-d H:i', $file['mtime'] ) ) );
+					WP_CLI::log( sprintf( '     %s  %s  %s', Ubac_Cleanup_Paths::shorten( $file['path'] ), size_format( $file['size'] ), gmdate( 'Y-m-d H:i', $file['mtime'] ) ) );
 				}
 
 				if ( $preview['truncated'] ) {
@@ -183,7 +183,7 @@ class Dahu_File_Cleanup_CLI {
 		if ( ! isset( $assoc_args['execute'] ) ) {
 			WP_CLI::log( 'Dry run. Nothing will be deleted. Add --execute to delete.' );
 
-			$rules  = Dahu_File_Cleanup_Settings::runnable_rules();
+			$rules  = Ubac_Cleanup_Settings::runnable_rules();
 			$chosen = array();
 			$only   = isset( $assoc_args['rule'] ) ? sanitize_key( (string) $assoc_args['rule'] ) : '';
 
@@ -203,7 +203,7 @@ class Dahu_File_Cleanup_CLI {
 
 			foreach ( $chosen as $key => $rule ) {
 				// Unbounded, for the same reason as `preview` above.
-				$preview = Dahu_File_Cleanup_Scanner::preview( $rule, 1, 0 );
+				$preview = Ubac_Cleanup_Scanner::preview( $rule, 1, 0 );
 
 				WP_CLI::log( sprintf( '%s [%s]: %d file(s), %s', $rule['label'], $key, $preview['count'], size_format( $preview['bytes'] ) ) );
 			}
@@ -212,7 +212,7 @@ class Dahu_File_Cleanup_CLI {
 		}
 
 		$only    = isset( $assoc_args['rule'] ) ? sanitize_key( (string) $assoc_args['rule'] ) : null;
-		$summary = Dahu_File_Cleanup_Runner::run( 'cli', $only );
+		$summary = Ubac_Cleanup_Runner::run( 'cli', $only );
 
 		if ( isset( $summary['locked'] ) ) {
 			WP_CLI::warning( 'Another run is in progress. Nothing was done.' );
@@ -261,7 +261,7 @@ class Dahu_File_Cleanup_CLI {
 	 */
 	private function chosen_rules( $assoc_args ) {
 
-		$rules = Dahu_File_Cleanup_Settings::rules();
+		$rules = Ubac_Cleanup_Settings::rules();
 
 		if ( ! isset( $assoc_args['rule'] ) ) {
 			return $rules;
