@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Ubac File Cleanup
  * Description:       A retention policy for the generated files that pile up on a WordPress server: named rules with their own folders, file extensions and maximum age, a dry run that lists every file before anything is deleted, a daily scheduled run, a per-run ceiling and a log.
- * Version:           1.1.2
+ * Version:           1.1.3
  * Author:            Hugo Vial-Jaime
  * Author URI:        https://dahu-concept.fr
  * License:           MIT
@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'UBAC_CLEANUP_VERSION', '1.1.2' );
+define( 'UBAC_CLEANUP_VERSION', '1.1.3' );
 define( 'UBAC_CLEANUP_FILE', __FILE__ );
 define( 'UBAC_CLEANUP_PATH', plugin_dir_path( __FILE__ ) );
 define( 'UBAC_CLEANUP_URL', plugin_dir_url( __FILE__ ) );

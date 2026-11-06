@@ -4,7 +4,7 @@ Tags: housekeeping, old files, data retention, cleanup, cron
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -143,6 +143,10 @@ No. It knows nothing about orders or products — it deletes files from folders.
 
 == Changelog ==
 
+= 1.1.3 =
+* Changed: the compiled French catalogue now travels in the package. It was left out on the grounds that the directory serves language packs, which is true only for a copy installed from the directory and only once translations have been imported: a copy installed by hand showed English with a catalogue that was fully translated.
+* Changed: the French readme moves under docs/, so the directory's checker no longer reports an unexpected markdown file at the plugin root.
+
 = 1.1.2 =
 * Changed: WordPress 6.2 is now the floor. Three extensions of the family need it for prepare()'s %i identifier placeholder, and the family states one floor rather than two because the welcome screen and the shared admin stylesheet are copied byte for byte across it.
 
@@ -159,6 +163,9 @@ No. It knows nothing about orders or products — it deletes files from folders.
 * First public release.
 
 == Upgrade Notice ==
+
+= 1.1.3 =
+French now works on a copy installed by hand: the compiled catalogue travels in the package. The French readme moves under docs/.
 
 = 1.1.2 =
 WordPress 6.2 is now the floor, in step with the rest of the family. Nothing else changes.
