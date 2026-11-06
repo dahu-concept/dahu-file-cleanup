@@ -4,13 +4,33 @@ Tags: housekeeping, old files, data retention, cleanup, cron
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
 A retention policy for generated files: named rules, a dry run that shows every file first, a daily run, a ceiling, and a log.
 
 == Description ==
+
+= Why another cleanup plugin? =
+
+Because most of them delete first and tell you after. This one is built the
+other way round:
+
+* **The rules are written in words and named**, one per line, so the policy is
+  readable by whoever inherits the site — not a set of checkboxes whose meaning
+  has to be reconstructed.
+* **The dry run comes first and lists every single file** it would delete, with
+  its rule and its age, before anything is removed. It takes up half the screen
+  because it is the half that matters.
+* **There is a ceiling per run.** A policy written slightly too wide cannot
+  empty a disk overnight; it removes at most what you allowed and says it
+  stopped.
+* **Everything that goes is logged**, so a question three months later has an
+  answer.
+
+If you want a one-click "free up space" button, this is the wrong plugin. It is
+for a site where someone has to be able to explain what was deleted and why.
 
 Invoice PDFs, shipping labels, quote PDFs, backup archives, export files, debug
 logs. Plugins generate them, nobody deletes them, and a year later the disk is
@@ -143,6 +163,9 @@ No. It knows nothing about orders or products — it deletes files from folders.
 
 == Changelog ==
 
+= 1.1.4 =
+* Changed: the readme now answers, in its own section, why this plugin exists alongside the other cleanup plugins -- named rules, a dry run that lists every file first, a ceiling per run, and a log.
+
 = 1.1.3 =
 * Changed: the compiled French catalogue now travels in the package. It was left out on the grounds that the directory serves language packs, which is true only for a copy installed from the directory and only once translations have been imported: a copy installed by hand showed English with a catalogue that was fully translated.
 * Changed: the French readme moves under docs/, so the directory's checker no longer reports an unexpected markdown file at the plugin root.
@@ -163,6 +186,9 @@ No. It knows nothing about orders or products — it deletes files from folders.
 * First public release.
 
 == Upgrade Notice ==
+
+= 1.1.4 =
+Documentation only: the readme now says what this plugin does that the other cleanup plugins do not.
 
 = 1.1.3 =
 French now works on a copy installed by hand: the compiled catalogue travels in the package. The French readme moves under docs/.
