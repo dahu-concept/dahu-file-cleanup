@@ -40,12 +40,26 @@ function ubac_cleanup_uninstall_site() {
 	delete_transient( 'ubac_cleanup_running' );
 
 	$settings = get_option( 'ubac_cleanup_settings', array() );
+	$wipe     = is_array( $settings ) && ! empty( $settings['delete_data_on_uninstall'] );
 
-	if ( ! is_array( $settings ) || empty( $settings['delete_data_on_uninstall'] ) ) {
+	/*
+	 * The settings go whatever the box says: they are configuration, like the
+	 * welcome flags above, and a reinstall sets them again. They were behind
+	 * the guard until 06/11/2026, so a site that left the box unticked kept
+	 * this row for ever after deleting the plugin -- the same leak that
+	 * ubac-shipping had with its own flag.
+	 *
+	 * Read into $wipe first, because the guard lives inside the row being
+	 * deleted.
+	 */
+	delete_option( 'ubac_cleanup_settings' );
+
+	if ( ! $wipe ) {
 		return;
 	}
 
-	delete_option( 'ubac_cleanup_settings' );
+	// The log is the data the box is about: which files this plugin deleted,
+	// when, and under which rule. That is a record of what was done.
 	delete_option( 'ubac_cleanup_log' );
 }
 
