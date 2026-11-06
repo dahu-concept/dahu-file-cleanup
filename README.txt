@@ -1,7 +1,7 @@
 === Ubac File Cleanup ===
 Contributors: dahuconcept
 Tags: housekeeping, old files, data retention, cleanup, cron
-Requires at least: 6.0
+Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.1.1
