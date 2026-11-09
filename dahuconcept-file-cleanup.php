@@ -169,7 +169,7 @@ require_once UBAC_CLEANUP_PATH . 'includes/ubac-welcome.php';
 register_activation_hook(
 	__FILE__,
 	static function () {
-		Ubac_Welcome::mark_activated( 'ubac-cleanup' );
+		Ubac_Welcome::mark_activated( 'dahuconcept-file-cleanup' );
 	}
 );
 
@@ -178,12 +178,12 @@ add_action(
 	static function () {
 		Ubac_Welcome::register(
 			array(
-				'slug'       => 'ubac-cleanup',
+				'slug'       => 'dahuconcept-file-cleanup',
 				'name'       => __( 'File cleanup', 'dahuconcept-file-cleanup' ),
 				'tagline'    => __( 'Finds uploaded files no longer attached to anything.', 'dahuconcept-file-cleanup' ),
 				'file'       => UBAC_CLEANUP_FILE,
 				'version'    => UBAC_CLEANUP_VERSION,
-				'textdomain' => 'ubac-cleanup',
+				'textdomain' => 'dahuconcept-file-cleanup',
 				'mark'       => array(
 					'view'  => '0 0 112 112',
 					'paths' => array(
