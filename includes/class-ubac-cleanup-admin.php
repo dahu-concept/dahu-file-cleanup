@@ -80,8 +80,8 @@ class Ubac_Cleanup_Admin {
 	public static function add_page() {
 
 		add_management_page(
-			__( 'File cleanup', 'ubac-cleanup' ),
-			__( 'File cleanup', 'ubac-cleanup' ),
+			__( 'File cleanup', 'dahuconcept-file-cleanup' ),
+			__( 'File cleanup', 'dahuconcept-file-cleanup' ),
 			self::CAPABILITY,
 			UBAC_CLEANUP_PAGE,
 			array( __CLASS__, 'render' )
@@ -199,7 +199,7 @@ class Ubac_Cleanup_Admin {
 	public static function handle_delete() {
 
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You are not allowed to change these rules.', 'ubac-cleanup' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You are not allowed to change these rules.', 'dahuconcept-file-cleanup' ), '', array( 'response' => 403 ) );
 		}
 
 		check_admin_referer( self::DELETE_ACTION );
@@ -234,7 +234,7 @@ class Ubac_Cleanup_Admin {
 	public static function handle_preset() {
 
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You are not allowed to change these rules.', 'ubac-cleanup' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You are not allowed to change these rules.', 'dahuconcept-file-cleanup' ), '', array( 'response' => 403 ) );
 		}
 
 		check_admin_referer( self::PRESET_ACTION );
@@ -297,8 +297,8 @@ class Ubac_Cleanup_Admin {
 		echo '<div class="wrap ubac-ui ubac-cleanup">';
 
 		echo '<div class="ubac-ui-head">';
-		printf( '<h1 class="ubac-ui-head__title">%s</h1>', esc_html__( 'File cleanup', 'ubac-cleanup' ) );
-		printf( '<p class="ubac-ui-head__sub">%s</p>', esc_html__( 'Finds uploaded files no longer attached to anything.', 'ubac-cleanup' ) );
+		printf( '<h1 class="ubac-ui-head__title">%s</h1>', esc_html__( 'File cleanup', 'dahuconcept-file-cleanup' ) );
+		printf( '<p class="ubac-ui-head__sub">%s</p>', esc_html__( 'Finds uploaded files no longer attached to anything.', 'dahuconcept-file-cleanup' ) );
 		echo '</div>';
 
 		// WordPress moves every admin notice to just after the first heading
@@ -340,10 +340,10 @@ class Ubac_Cleanup_Admin {
 		$notice = sanitize_key( wp_unslash( $_GET['ubac-cleanup-notice'] ) );
 
 		$messages = array(
-			'rule-deleted'   => array( 'success', __( 'Rule deleted. No files were touched: deleting a rule only removes the rule.', 'ubac-cleanup' ) ),
-			'rule-missing'   => array( 'warning', __( 'That rule no longer exists.', 'ubac-cleanup' ) ),
-			'preset-added'   => array( 'success', __( 'Rule added, switched off. Check its folders with the dry run, set a retention, then enable it.', 'ubac-cleanup' ) ),
-			'preset-missing' => array( 'warning', __( 'That ready-made rule is not available.', 'ubac-cleanup' ) ),
+			'rule-deleted'   => array( 'success', __( 'Rule deleted. No files were touched: deleting a rule only removes the rule.', 'dahuconcept-file-cleanup' ) ),
+			'rule-missing'   => array( 'warning', __( 'That rule no longer exists.', 'dahuconcept-file-cleanup' ) ),
+			'preset-added'   => array( 'success', __( 'Rule added, switched off. Check its folders with the dry run, set a retention, then enable it.', 'dahuconcept-file-cleanup' ) ),
+			'preset-missing' => array( 'warning', __( 'That ready-made rule is not available.', 'dahuconcept-file-cleanup' ) ),
 		);
 
 		if ( ! isset( $messages[ $notice ] ) ) {
@@ -372,8 +372,8 @@ class Ubac_Cleanup_Admin {
 
 		printf(
 			'<div class="notice notice-warning ubac-cleanup__standing"><p><strong>%1$s</strong> %2$s</p></div>',
-			esc_html__( 'Deleted files are gone.', 'ubac-cleanup' ),
-			esc_html__( 'There is no undo and no trash. Generated files are often business records as well: invoices, delivery notes, quotes and accounting exports have minimum retention periods in most countries, and a backup archive is sometimes the only copy of something. Use the dry run, and set a retention you can defend.', 'ubac-cleanup' )
+			esc_html__( 'Deleted files are gone.', 'dahuconcept-file-cleanup' ),
+			esc_html__( 'There is no undo and no trash. Generated files are often business records as well: invoices, delivery notes, quotes and accounting exports have minimum retention periods in most countries, and a backup archive is sometimes the only copy of something. Use the dry run, and set a retention you can defend.', 'dahuconcept-file-cleanup' )
 		);
 	}
 
@@ -390,8 +390,8 @@ class Ubac_Cleanup_Admin {
 
 		printf(
 			'<div class="notice notice-info"><p><strong>%1$s</strong> %2$s</p><p><code>wp file-cleanup run --execute</code></p></div>',
-			esc_html__( 'WP-Cron is disabled on this site.', 'ubac-cleanup' ),
-			esc_html__( 'The daily run only happens if a real server cron calls wp-cron.php. If it does not, use the button below, or put this command on a schedule:', 'ubac-cleanup' )
+			esc_html__( 'WP-Cron is disabled on this site.', 'dahuconcept-file-cleanup' ),
+			esc_html__( 'The daily run only happens if a real server cron calls wp-cron.php. If it does not, use the button below, or put this command on a schedule:', 'dahuconcept-file-cleanup' )
 		);
 	}
 
@@ -409,23 +409,23 @@ class Ubac_Cleanup_Admin {
 		$totals  = Ubac_Cleanup_Log::totals();
 
 		$lines = array(
-			__( 'Rules', 'ubac-cleanup' )              => sprintf(
+			__( 'Rules', 'dahuconcept-file-cleanup' )              => sprintf(
 				/* translators: 1: total rules, 2: how many would run. */
-				_n( '%1$s rule, %2$s of them ready to run', '%1$s rules, %2$s of them ready to run', count( $rules ), 'ubac-cleanup' ),
+				_n( '%1$s rule, %2$s of them ready to run', '%1$s rules, %2$s of them ready to run', count( $rules ), 'dahuconcept-file-cleanup' ),
 				number_format_i18n( count( $rules ) ),
 				number_format_i18n( $enabled )
 			),
-			__( 'Next scheduled run', 'ubac-cleanup' ) => $next
+			__( 'Next scheduled run', 'dahuconcept-file-cleanup' ) => $next
 				? wp_date( 'j F Y, H:i', $next )
-				: __( 'not scheduled — it will be rescheduled on the next admin page load', 'ubac-cleanup' ),
-			__( 'Ceiling', 'ubac-cleanup' )            => sprintf(
+				: __( 'not scheduled — it will be rescheduled on the next admin page load', 'dahuconcept-file-cleanup' ),
+			__( 'Ceiling', 'dahuconcept-file-cleanup' )            => sprintf(
 				/* translators: %s: number of files. */
-				__( '%s files per rule per run', 'ubac-cleanup' ),
+				__( '%s files per rule per run', 'dahuconcept-file-cleanup' ),
 				number_format_i18n( (int) $settings['max_per_run'] )
 			),
-			__( 'In the log', 'ubac-cleanup' )         => sprintf(
+			__( 'In the log', 'dahuconcept-file-cleanup' )         => sprintf(
 				/* translators: 1: number of files, 2: formatted size. */
-				__( '%1$s files deleted, %2$s freed', 'ubac-cleanup' ),
+				__( '%1$s files deleted, %2$s freed', 'dahuconcept-file-cleanup' ),
 				number_format_i18n( $totals['files'] ),
 				size_format( $totals['bytes'] )
 			),
@@ -459,12 +459,12 @@ class Ubac_Cleanup_Admin {
 
 		settings_fields( Ubac_Cleanup_Settings::GROUP );
 
-		printf( '<h2>%s</h2>', esc_html__( 'Rules', 'ubac-cleanup' ) );
+		printf( '<h2>%s</h2>', esc_html__( 'Rules', 'dahuconcept-file-cleanup' ) );
 
 		if ( ! $rules ) {
 			printf(
 				'<p class="ubac-ui-hint">%s</p>',
-				esc_html__( 'No rules yet, so nothing is deleted. Fill in the empty rule below, or add a ready-made one.', 'ubac-cleanup' )
+				esc_html__( 'No rules yet, so nothing is deleted. Fill in the empty rule below, or add a ready-made one.', 'dahuconcept-file-cleanup' )
 			);
 		}
 
@@ -474,32 +474,32 @@ class Ubac_Cleanup_Admin {
 
 		self::render_rule( $option, '__new', Ubac_Cleanup_Rules::blank(), true );
 
-		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Limits', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Limits', 'dahuconcept-file-cleanup' ) );
 
 		echo '<table class="form-table" role="presentation"><tbody>';
 
 		printf(
 			'<tr><th scope="row"><label for="ubac-cleanup-ceiling">%1$s</label></th><td><input type="number" min="1" max="%2$s" step="1" class="small-text" id="ubac-cleanup-ceiling" name="%3$s[max_per_run]" value="%4$s"> <span class="ubac-cleanup__muted">%5$s</span><p class="description">%6$s</p></td></tr>',
-			esc_html__( 'Files per rule per run', 'ubac-cleanup' ),
+			esc_html__( 'Files per rule per run', 'dahuconcept-file-cleanup' ),
 			esc_attr( Ubac_Cleanup_Settings::MAX_PER_RUN_LIMIT ),
 			esc_attr( $option ),
 			esc_attr( (string) $settings['max_per_run'] ),
-			esc_html__( 'files', 'ubac-cleanup' ),
-			esc_html__( 'A run stops a rule once it has deleted this many files, and says so in the log. It also stops a rule that has looked at far more files than this without finding that many to delete, so a folder full of files none of which are old enough costs a bounded walk rather than the whole folder. It is there for the day a folder is widened by one line and suddenly matches forty thousand files: a run that stops and reports is recoverable, a run that does not is not. The remainder goes on the next run.', 'ubac-cleanup' )
+			esc_html__( 'files', 'dahuconcept-file-cleanup' ),
+			esc_html__( 'A run stops a rule once it has deleted this many files, and says so in the log. It also stops a rule that has looked at far more files than this without finding that many to delete, so a folder full of files none of which are old enough costs a bounded walk rather than the whole folder. It is there for the day a folder is widened by one line and suddenly matches forty thousand files: a run that stops and reports is recoverable, a run that does not is not. The remainder goes on the next run.', 'dahuconcept-file-cleanup' )
 		);
 
 		printf(
 			'<tr><th scope="row">%1$s</th><td><label><input type="checkbox" name="%2$s[delete_data_on_uninstall]" value="1" %3$s> %4$s</label><p class="description">%5$s</p></td></tr>',
-			esc_html__( 'On uninstall', 'ubac-cleanup' ),
+			esc_html__( 'On uninstall', 'dahuconcept-file-cleanup' ),
 			esc_attr( $option ),
 			checked( ! empty( $settings['delete_data_on_uninstall'] ), true, false ),
-			esc_html__( 'Also delete the rules and the log', 'ubac-cleanup' ),
-			esc_html__( 'Off by default, because uninstalling is often a step in reinstalling, and the log is the record of what this plugin deleted. Files on disk are never touched by an uninstall either way.', 'ubac-cleanup' )
+			esc_html__( 'Also delete the rules and the log', 'dahuconcept-file-cleanup' ),
+			esc_html__( 'Off by default, because uninstalling is often a step in reinstalling, and the log is the record of what this plugin deleted. Files on disk are never touched by an uninstall either way.', 'dahuconcept-file-cleanup' )
 		);
 
 		echo '</tbody></table></div>';
 
-		submit_button( __( 'Save rules', 'ubac-cleanup' ) );
+		submit_button( __( 'Save rules', 'dahuconcept-file-cleanup' ) );
 
 		echo '</form>';
 	}
@@ -527,8 +527,8 @@ class Ubac_Cleanup_Admin {
 			'<span class="ubac-cleanup__panel-title">%s</span>',
 			esc_html(
 				$is_new
-					? __( 'New rule', 'ubac-cleanup' )
-					: ( '' !== $rule['label'] ? $rule['label'] : __( '(unnamed)', 'ubac-cleanup' ) )
+					? __( 'New rule', 'dahuconcept-file-cleanup' )
+					: ( '' !== $rule['label'] ? $rule['label'] : __( '(unnamed)', 'dahuconcept-file-cleanup' ) )
 			)
 		);
 
@@ -537,15 +537,15 @@ class Ubac_Cleanup_Admin {
 				'<span class="ubac-cleanup__panel-state">%s</span>',
 				esc_html(
 					$blockers
-						? __( 'incomplete', 'ubac-cleanup' )
-						: ( ! empty( $rule['enabled'] ) ? __( 'on', 'ubac-cleanup' ) : __( 'off', 'ubac-cleanup' ) )
+						? __( 'incomplete', 'dahuconcept-file-cleanup' )
+						: ( ! empty( $rule['enabled'] ) ? __( 'on', 'dahuconcept-file-cleanup' ) : __( 'off', 'dahuconcept-file-cleanup' ) )
 				)
 			);
 
 			printf(
 				'<button type="submit" form="ubac-cleanup-delete-%1$s" class="button-link ubac-cleanup__delete">%2$s</button>',
 				esc_attr( sanitize_html_class( $key ) ),
-				esc_html__( 'Delete rule', 'ubac-cleanup' )
+				esc_html__( 'Delete rule', 'dahuconcept-file-cleanup' )
 			);
 		}
 
@@ -566,56 +566,56 @@ class Ubac_Cleanup_Admin {
 		printf(
 			'<tr><th scope="row"><label for="%1$s-label">%2$s</label></th><td><input type="text" class="regular-text" id="%1$s-label" name="%3$s[label]" value="%4$s"><p class="description">%5$s</p></td></tr>',
 			esc_attr( $id ),
-			esc_html__( 'Name', 'ubac-cleanup' ),
+			esc_html__( 'Name', 'dahuconcept-file-cleanup' ),
 			esc_attr( $name ),
 			esc_attr( $rule['label'] ),
-			esc_html__( 'Shown in the log and on this screen. Renaming a rule keeps its history: the name is a label, not the identifier.', 'ubac-cleanup' )
+			esc_html__( 'Shown in the log and on this screen. Renaming a rule keeps its history: the name is a label, not the identifier.', 'dahuconcept-file-cleanup' )
 		);
 
 		printf(
 			'<tr><th scope="row"><label for="%1$s-paths">%2$s</label></th><td><textarea class="large-text code" rows="3" id="%1$s-paths" name="%3$s[paths]">%4$s</textarea><p class="description">%5$s</p></td></tr>',
 			esc_attr( $id ),
-			esc_html__( 'Folders', 'ubac-cleanup' ),
+			esc_html__( 'Folders', 'dahuconcept-file-cleanup' ),
 			esc_attr( $name ),
 			esc_textarea( $rule['paths'] ),
-			esc_html__( 'One per line, relative to the WordPress root. No wildcards. The root folders of the site, the uploads root, and anything inside the plugin, theme, language or update folders are refused — point at a specific subfolder.', 'ubac-cleanup' )
+			esc_html__( 'One per line, relative to the WordPress root. No wildcards. The root folders of the site, the uploads root, and anything inside the plugin, theme, language or update folders are refused — point at a specific subfolder.', 'dahuconcept-file-cleanup' )
 		);
 
 		printf(
 			'<tr><th scope="row"><label for="%1$s-extensions">%2$s</label></th><td><input type="text" class="regular-text" id="%1$s-extensions" name="%3$s[extensions]" value="%4$s" placeholder="%5$s"><p class="description">%6$s</p></td></tr>',
 			esc_attr( $id ),
-			esc_html__( 'File extensions', 'ubac-cleanup' ),
+			esc_html__( 'File extensions', 'dahuconcept-file-cleanup' ),
 			esc_attr( $name ),
 			esc_attr( implode( ', ', $rule['extensions'] ) ),
-			esc_attr__( 'pdf, zip, log', 'ubac-cleanup' ),
-			esc_html__( 'Separated by commas. This is the whole of the selection — a rule with no extensions matches nothing, and there is no way to say "everything". Code, stylesheet, configuration and translation extensions are refused.', 'ubac-cleanup' )
+			esc_attr__( 'pdf, zip, log', 'dahuconcept-file-cleanup' ),
+			esc_html__( 'Separated by commas. This is the whole of the selection — a rule with no extensions matches nothing, and there is no way to say "everything". Code, stylesheet, configuration and translation extensions are refused.', 'dahuconcept-file-cleanup' )
 		);
 
 		printf(
 			'<tr><th scope="row"><label for="%1$s-days">%2$s</label></th><td><input type="number" min="1" step="1" class="small-text" id="%1$s-days" name="%3$s[days]" value="%4$s"> <span class="ubac-cleanup__muted">%5$s</span><p class="description">%6$s</p></td></tr>',
 			esc_attr( $id ),
-			esc_html__( 'Delete files older than', 'ubac-cleanup' ),
+			esc_html__( 'Delete files older than', 'dahuconcept-file-cleanup' ),
 			esc_attr( $name ),
 			esc_attr( (string) $rule['days'] ),
-			esc_html__( 'days', 'ubac-cleanup' ),
-			esc_html__( 'Measured on the file modification time. Leave it empty and the rule cannot be switched on: an empty field is not a way of saying zero.', 'ubac-cleanup' )
+			esc_html__( 'days', 'dahuconcept-file-cleanup' ),
+			esc_html__( 'Measured on the file modification time. Leave it empty and the rule cannot be switched on: an empty field is not a way of saying zero.', 'dahuconcept-file-cleanup' )
 		);
 
 		printf(
 			'<tr><th scope="row">%1$s</th><td><label><input type="checkbox" name="%2$s[recursive]" value="1" %3$s> %4$s</label><p class="description">%5$s</p></td></tr>',
-			esc_html__( 'Subfolders', 'ubac-cleanup' ),
+			esc_html__( 'Subfolders', 'dahuconcept-file-cleanup' ),
 			esc_attr( $name ),
 			checked( ! empty( $rule['recursive'] ), true, false ),
-			esc_html__( 'Also look in subfolders', 'ubac-cleanup' ),
-			esc_html__( 'Off means the listed folders only. Symbolic links are never followed, in either mode, and never deleted.', 'ubac-cleanup' )
+			esc_html__( 'Also look in subfolders', 'dahuconcept-file-cleanup' ),
+			esc_html__( 'Off means the listed folders only. Symbolic links are never followed, in either mode, and never deleted.', 'dahuconcept-file-cleanup' )
 		);
 
 		printf(
 			'<tr><th scope="row">%1$s</th><td><label><input type="checkbox" name="%2$s[enabled]" value="1" %3$s> %4$s</label></td></tr>',
-			esc_html__( 'Enabled', 'ubac-cleanup' ),
+			esc_html__( 'Enabled', 'dahuconcept-file-cleanup' ),
 			esc_attr( $name ),
 			checked( ! empty( $rule['enabled'] ), true, false ),
-			esc_html__( 'Include this rule in the daily run', 'ubac-cleanup' )
+			esc_html__( 'Include this rule in the daily run', 'dahuconcept-file-cleanup' )
 		);
 
 		echo '</tbody></table>';
@@ -665,11 +665,11 @@ class Ubac_Cleanup_Admin {
 			return;
 		}
 
-		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Ready-made rules', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Ready-made rules', 'dahuconcept-file-cleanup' ) );
 
 		printf(
 			'<p class="ubac-cleanup__muted">%s</p>',
-			esc_html__( 'The default folders of plugins known to leave files behind. Added switched off, with the folder editable: a site that moved the folder, or does not have that plugin, sees the dry run say so.', 'ubac-cleanup' )
+			esc_html__( 'The default folders of plugins known to leave files behind. Added switched off, with the folder editable: a site that moved the folder, or does not have that plugin, sees the dry run say so.', 'dahuconcept-file-cleanup' )
 		);
 
 		printf(
@@ -695,7 +695,7 @@ class Ubac_Cleanup_Admin {
 
 		printf(
 			'<button type="submit" class="ubac-ui-btn">%s</button>',
-			esc_html__( 'Add as a new rule', 'ubac-cleanup' )
+			esc_html__( 'Add as a new rule', 'dahuconcept-file-cleanup' )
 		);
 
 		echo '</form>';
@@ -725,7 +725,7 @@ class Ubac_Cleanup_Admin {
 	 */
 	private static function render_actions( $rules ) {
 
-		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Actions', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Actions', 'dahuconcept-file-cleanup' ) );
 
 		echo '<div class="ubac-cleanup__actions">';
 
@@ -734,7 +734,7 @@ class Ubac_Cleanup_Admin {
 		echo '<input type="hidden" name="ubac_cleanup_action" value="preview">';
 		printf(
 			'<button type="submit" class="ubac-ui-btn ubac-ui-btn--go">%s</button>',
-			esc_html__( 'Dry run — deletes nothing', 'ubac-cleanup' )
+			esc_html__( 'Dry run — deletes nothing', 'dahuconcept-file-cleanup' )
 		);
 		echo '</form>';
 
@@ -744,7 +744,7 @@ class Ubac_Cleanup_Admin {
 			echo '<input type="hidden" name="ubac_cleanup_action" value="run">';
 			printf(
 				'<button type="submit" class="ubac-ui-btn">%s</button>',
-				esc_html__( 'Run the enabled rules now', 'ubac-cleanup' )
+				esc_html__( 'Run the enabled rules now', 'dahuconcept-file-cleanup' )
 			);
 			echo '</form>';
 		}
@@ -753,7 +753,7 @@ class Ubac_Cleanup_Admin {
 
 		printf(
 			'<p class="description">%s</p>',
-			esc_html__( 'The dry run covers every rule, switched on or not. Running now covers only the rules that are on and complete, exactly as the daily run does.', 'ubac-cleanup' )
+			esc_html__( 'The dry run covers every rule, switched on or not. Running now covers only the rules that are on and complete, exactly as the daily run does.', 'dahuconcept-file-cleanup' )
 		);
 
 		echo '</div>';
@@ -770,10 +770,10 @@ class Ubac_Cleanup_Admin {
 			return;
 		}
 
-		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Dry run — nothing was deleted', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Dry run — nothing was deleted', 'dahuconcept-file-cleanup' ) );
 
 		if ( ! self::$preview ) {
-			printf( '<p class="ubac-cleanup__muted">%s</p>', esc_html__( 'There are no rules to run.', 'ubac-cleanup' ) );
+			printf( '<p class="ubac-cleanup__muted">%s</p>', esc_html__( 'There are no rules to run.', 'dahuconcept-file-cleanup' ) );
 			echo '</div>';
 
 			return;
@@ -787,8 +787,8 @@ class Ubac_Cleanup_Admin {
 				esc_html( '' !== $block['label'] ? $block['label'] : $key ),
 				esc_html(
 					$block['blockers']
-						? __( 'incomplete — would not run', 'ubac-cleanup' )
-						: ( $block['enabled'] ? __( 'on', 'ubac-cleanup' ) : __( 'off — would not run', 'ubac-cleanup' ) )
+						? __( 'incomplete — would not run', 'dahuconcept-file-cleanup' )
+						: ( $block['enabled'] ? __( 'on', 'dahuconcept-file-cleanup' ) : __( 'off — would not run', 'dahuconcept-file-cleanup' ) )
 				)
 			);
 
@@ -851,13 +851,13 @@ class Ubac_Cleanup_Admin {
 		echo '<table class="widefat striped ubac-cleanup__diagnostics"><thead><tr>';
 
 		$headings = array(
-			__( 'Folder as typed', 'ubac-cleanup' ),
-			__( 'Resolved to', 'ubac-cleanup' ),
-			__( 'Files', 'ubac-cleanup' ),
-			__( 'Right extension', 'ubac-cleanup' ),
-			__( 'Oldest', 'ubac-cleanup' ),
-			__( 'Newest', 'ubac-cleanup' ),
-			__( 'Selected', 'ubac-cleanup' ),
+			__( 'Folder as typed', 'dahuconcept-file-cleanup' ),
+			__( 'Resolved to', 'dahuconcept-file-cleanup' ),
+			__( 'Files', 'dahuconcept-file-cleanup' ),
+			__( 'Right extension', 'dahuconcept-file-cleanup' ),
+			__( 'Oldest', 'dahuconcept-file-cleanup' ),
+			__( 'Newest', 'dahuconcept-file-cleanup' ),
+			__( 'Selected', 'dahuconcept-file-cleanup' ),
 		);
 
 		foreach ( $headings as $heading ) {
@@ -888,7 +888,7 @@ class Ubac_Cleanup_Admin {
 					? '<br><span class="ubac-cleanup__muted">' . esc_html(
 						sprintf(
 							/* translators: %s: number of symbolic links. */
-							_n( '%s link skipped', '%s links skipped', $diagnostic['symlinks'], 'ubac-cleanup' ),
+							_n( '%s link skipped', '%s links skipped', $diagnostic['symlinks'], 'dahuconcept-file-cleanup' ),
 							number_format_i18n( $diagnostic['symlinks'] )
 						)
 					) . '</span>'
@@ -908,7 +908,7 @@ class Ubac_Cleanup_Admin {
 		if ( Ubac_Cleanup_Scanner::looks_like_reset_timestamps( $diagnostics ) ) {
 			printf(
 				'<p class="ubac-cleanup__warn">%s</p>',
-				esc_html__( 'Worth a look: plenty of files carry an extension this rule selects, and not one of them is old enough. If that folder is supposed to hold old files, their modification times have probably been reset by a clone or a restore of this environment — in which case no retention can find anything old here, however old the files really are elsewhere.', 'ubac-cleanup' )
+				esc_html__( 'Worth a look: plenty of files carry an extension this rule selects, and not one of them is old enough. If that folder is supposed to hold old files, their modification times have probably been reset by a clone or a restore of this environment — in which case no retention can find anything old here, however old the files really are elsewhere.', 'dahuconcept-file-cleanup' )
 			);
 		}
 	}
@@ -931,15 +931,15 @@ class Ubac_Cleanup_Admin {
 			'<h4>%s</h4>',
 			esc_html(
 				( $block['truncated'] || empty( $block['complete'] ) )
-					? __( 'By subfolder, over the files listed below only', 'ubac-cleanup' )
-					: __( 'By subfolder', 'ubac-cleanup' )
+					? __( 'By subfolder, over the files listed below only', 'dahuconcept-file-cleanup' )
+					: __( 'By subfolder', 'dahuconcept-file-cleanup' )
 			)
 		);
 
 		echo '<table class="widefat striped ubac-cleanup__subfolders"><thead><tr>';
-		printf( '<th scope="col">%s</th>', esc_html__( 'Subfolder', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Files', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Size', 'ubac-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Subfolder', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Files', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Size', 'dahuconcept-file-cleanup' ) );
 		echo '</tr></thead><tbody>';
 
 		foreach ( $folders as $folder => $totals ) {
@@ -963,9 +963,9 @@ class Ubac_Cleanup_Admin {
 	private static function render_preview_files( $block ) {
 
 		echo '<table class="widefat striped ubac-cleanup__files"><thead><tr>';
-		printf( '<th scope="col">%s</th>', esc_html__( 'File', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Size', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Last modified', 'ubac-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'File', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Size', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Last modified', 'dahuconcept-file-cleanup' ) );
 		echo '</tr></thead><tbody>';
 
 		foreach ( $block['files'] as $file ) {
@@ -983,7 +983,7 @@ class Ubac_Cleanup_Admin {
 				esc_html(
 					sprintf(
 						/* translators: %s: number of further files. */
-						__( '… and %s more, not listed', 'ubac-cleanup' ),
+						__( '… and %s more, not listed', 'dahuconcept-file-cleanup' ),
 						number_format_i18n( $block['count'] - count( $block['files'] ) )
 					)
 				)
@@ -1004,12 +1004,12 @@ class Ubac_Cleanup_Admin {
 			return;
 		}
 
-		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Manual run', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Manual run', 'dahuconcept-file-cleanup' ) );
 
 		if ( isset( self::$summary['locked'] ) ) {
 			printf(
 				'<p class="ubac-cleanup__warn">%s</p>',
-				esc_html__( 'Another run was already in progress, so nothing was done. Try again in a few minutes.', 'ubac-cleanup' )
+				esc_html__( 'Another run was already in progress, so nothing was done. Try again in a few minutes.', 'dahuconcept-file-cleanup' )
 			);
 			echo '</div>';
 
@@ -1019,7 +1019,7 @@ class Ubac_Cleanup_Admin {
 		if ( ! self::$summary ) {
 			printf(
 				'<p class="ubac-cleanup__muted">%s</p>',
-				esc_html__( 'No rule is both switched on and complete, so nothing was deleted.', 'ubac-cleanup' )
+				esc_html__( 'No rule is both switched on and complete, so nothing was deleted.', 'dahuconcept-file-cleanup' )
 			);
 			echo '</div>';
 
@@ -1027,10 +1027,10 @@ class Ubac_Cleanup_Admin {
 		}
 
 		echo '<table class="ubac-ui-table"><thead><tr>';
-		printf( '<th scope="col">%s</th>', esc_html__( 'Rule', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Deleted', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Freed', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Notes', 'ubac-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Rule', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Deleted', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Freed', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Notes', 'dahuconcept-file-cleanup' ) );
 		echo '</tr></thead><tbody>';
 
 		foreach ( self::$summary as $result ) {
@@ -1039,15 +1039,15 @@ class Ubac_Cleanup_Admin {
 			if ( $result['failed'] ) {
 				$notes[] = sprintf(
 					/* translators: %s: number of files. */
-					_n( '%s file could not be deleted', '%s files could not be deleted', $result['failed'], 'ubac-cleanup' ),
+					_n( '%s file could not be deleted', '%s files could not be deleted', $result['failed'], 'dahuconcept-file-cleanup' ),
 					number_format_i18n( $result['failed'] )
 				);
 			}
 
 			if ( $result['capped'] ) {
 				$notes[] = 'work' === $result['capped_reason']
-					? __( 'this rule looked at as many files as its ceiling allows without finding that many to delete, and stopped; the rest goes on the next run', 'ubac-cleanup' )
-					: __( 'the ceiling was reached; the rest goes on the next run', 'ubac-cleanup' );
+					? __( 'this rule looked at as many files as its ceiling allows without finding that many to delete, and stopped; the rest goes on the next run', 'dahuconcept-file-cleanup' )
+					: __( 'the ceiling was reached; the rest goes on the next run', 'dahuconcept-file-cleanup' );
 			}
 
 			printf(
@@ -1072,12 +1072,12 @@ class Ubac_Cleanup_Admin {
 		$rows  = Ubac_Cleanup_Log::all();
 		$shown = array_slice( $rows, 0, 50 );
 
-		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Log', 'ubac-cleanup' ) );
+		printf( '<div class="ubac-ui-card"><div class="ubac-ui-card__head"><h2 class="ubac-ui-card__title">%s</h2></div>', esc_html__( 'Log', 'dahuconcept-file-cleanup' ) );
 
 		if ( ! $rows ) {
 			printf(
 				'<p class="ubac-ui-hint">%s</p>',
-				esc_html__( 'Nothing has run yet. A row is written for every rule on every run, including runs that deleted nothing.', 'ubac-cleanup' )
+				esc_html__( 'Nothing has run yet. A row is written for every rule on every run, including runs that deleted nothing.', 'dahuconcept-file-cleanup' )
 			);
 			echo '</div>';
 
@@ -1085,17 +1085,17 @@ class Ubac_Cleanup_Admin {
 		}
 
 		$modes = array(
-			'scheduled' => __( 'scheduled', 'ubac-cleanup' ),
-			'manual'    => __( 'manual', 'ubac-cleanup' ),
-			'cli'       => __( 'WP-CLI', 'ubac-cleanup' ),
+			'scheduled' => __( 'scheduled', 'dahuconcept-file-cleanup' ),
+			'manual'    => __( 'manual', 'dahuconcept-file-cleanup' ),
+			'cli'       => __( 'WP-CLI', 'dahuconcept-file-cleanup' ),
 		);
 
 		echo '<table class="widefat striped ubac-cleanup__log"><thead><tr>';
-		printf( '<th scope="col">%s</th>', esc_html__( 'When', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Started by', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Rule', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Deleted', 'ubac-cleanup' ) );
-		printf( '<th scope="col">%s</th>', esc_html__( 'Freed', 'ubac-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'When', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Started by', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Rule', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Deleted', 'dahuconcept-file-cleanup' ) );
+		printf( '<th scope="col">%s</th>', esc_html__( 'Freed', 'dahuconcept-file-cleanup' ) );
 		echo '</tr></thead><tbody>';
 
 		foreach ( $shown as $row ) {
@@ -1107,7 +1107,7 @@ class Ubac_Cleanup_Admin {
 				esc_html( $mode ),
 				esc_html( (string) ( isset( $row['label'] ) && '' !== $row['label'] ? $row['label'] : ( isset( $row['rule'] ) ? $row['rule'] : '' ) ) ),
 				esc_html( number_format_i18n( (int) ( isset( $row['files'] ) ? $row['files'] : 0 ) ) ),
-				empty( $row['capped'] ) ? '' : ' <span class="ubac-cleanup__warn">' . esc_html__( '(ceiling)', 'ubac-cleanup' ) . '</span>',
+				empty( $row['capped'] ) ? '' : ' <span class="ubac-cleanup__warn">' . esc_html__( '(ceiling)', 'dahuconcept-file-cleanup' ) . '</span>',
 				esc_html( size_format( (int) ( isset( $row['bytes'] ) ? $row['bytes'] : 0 ) ) )
 			);
 		}
@@ -1120,7 +1120,7 @@ class Ubac_Cleanup_Admin {
 				esc_html(
 					sprintf(
 						/* translators: 1: rows shown, 2: rows kept in total. */
-						__( 'Showing the %1$s most recent of %2$s rows kept.', 'ubac-cleanup' ),
+						__( 'Showing the %1$s most recent of %2$s rows kept.', 'dahuconcept-file-cleanup' ),
 						number_format_i18n( count( $shown ) ),
 						number_format_i18n( count( $rows ) )
 					)
@@ -1131,7 +1131,7 @@ class Ubac_Cleanup_Admin {
 		printf( '<form method="post" action="%s" class="ubac-cleanup__clear">', esc_url( self::screen_url() ) );
 		wp_nonce_field( 'ubac_cleanup_clear_log' );
 		echo '<input type="hidden" name="ubac_cleanup_action" value="clear-log">';
-		printf( '<button type="submit" class="button-link ubac-cleanup__delete">%s</button>', esc_html__( 'Clear the log', 'ubac-cleanup' ) );
+		printf( '<button type="submit" class="button-link ubac-cleanup__delete">%s</button>', esc_html__( 'Clear the log', 'dahuconcept-file-cleanup' ) );
 		echo '</form></div>';
 	}
 

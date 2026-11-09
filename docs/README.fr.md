@@ -1,4 +1,4 @@
-# Ubac File Cleanup
+# DahuConcept File Cleanup
 
 Une politique de conservation pour les fichiers générés qui s'accumulent sur un
 serveur WordPress : des règles nommées avec leurs dossiers, leurs extensions et

@@ -328,7 +328,7 @@ class Ubac_Cleanup_Settings {
 				'ubac-cleanup-extension-' . sanitize_key( $extension ),
 				sprintf(
 					/* translators: 1: file extension, 2: reason it was refused. */
-					__( 'Extension “%1$s” was not kept: %2$s', 'ubac-cleanup' ),
+					__( 'Extension “%1$s” was not kept: %2$s', 'dahuconcept-file-cleanup' ),
 					$extension,
 					$reason
 				),

@@ -261,17 +261,17 @@ class Ubac_Cleanup_Rules {
 			}
 
 			if ( ! ctype_alnum( $part ) ) {
-				$refused[ $part ] = __( 'letters and digits only', 'ubac-cleanup' );
+				$refused[ $part ] = __( 'letters and digits only', 'dahuconcept-file-cleanup' );
 				continue;
 			}
 
 			if ( strlen( $part ) > self::EXTENSION_MAX_LENGTH ) {
-				$refused[ $part ] = __( 'too long to be a file extension', 'ubac-cleanup' );
+				$refused[ $part ] = __( 'too long to be a file extension', 'dahuconcept-file-cleanup' );
 				continue;
 			}
 
 			if ( in_array( $part, $forbidden, true ) ) {
-				$refused[ $part ] = __( 'code, configuration and translation files are never deleted by this plugin', 'ubac-cleanup' );
+				$refused[ $part ] = __( 'code, configuration and translation files are never deleted by this plugin', 'dahuconcept-file-cleanup' );
 				continue;
 			}
 
@@ -282,7 +282,7 @@ class Ubac_Cleanup_Rules {
 			if ( count( $kept ) >= self::MAX_EXTENSIONS ) {
 				$refused[ $part ] = sprintf(
 					/* translators: %d: maximum number of extensions per rule. */
-					__( 'a rule lists at most %d extensions', 'ubac-cleanup' ),
+					__( 'a rule lists at most %d extensions', 'dahuconcept-file-cleanup' ),
 					self::MAX_EXTENSIONS
 				);
 				continue;
@@ -333,19 +333,19 @@ class Ubac_Cleanup_Rules {
 		$blockers = array();
 
 		if ( '' === trim( (string) ( isset( $rule['label'] ) ? $rule['label'] : '' ) ) ) {
-			$blockers[] = __( 'the rule has no name', 'ubac-cleanup' );
+			$blockers[] = __( 'the rule has no name', 'dahuconcept-file-cleanup' );
 		}
 
 		if ( ! self::path_lines( $rule ) ) {
-			$blockers[] = __( 'no folder is listed', 'ubac-cleanup' );
+			$blockers[] = __( 'no folder is listed', 'dahuconcept-file-cleanup' );
 		}
 
 		if ( empty( $rule['extensions'] ) ) {
-			$blockers[] = __( 'no file extension is listed, so the rule would select nothing', 'ubac-cleanup' );
+			$blockers[] = __( 'no file extension is listed, so the rule would select nothing', 'dahuconcept-file-cleanup' );
 		}
 
 		if ( '' === $rule['days'] ) {
-			$blockers[] = __( 'no retention in days is set', 'ubac-cleanup' );
+			$blockers[] = __( 'no retention in days is set', 'dahuconcept-file-cleanup' );
 		}
 
 		return $blockers;
@@ -400,40 +400,40 @@ class Ubac_Cleanup_Rules {
 
 		$presets = array(
 			'invoices' => array(
-				'label'       => __( 'Invoice and packing-slip PDFs', 'ubac-cleanup' ),
+				'label'       => __( 'Invoice and packing-slip PDFs', 'dahuconcept-file-cleanup' ),
 				'paths'       => 'wp-content/uploads/wpo_wcpdf/attachments',
 				'extensions'  => array( 'pdf' ),
 				'days'        => '',
 				'recursive'   => false,
 				'enabled'     => false,
-				'note'        => __( 'Written by PDF Invoices & Packing Slips for WooCommerce. These are accounting records: in several countries they must be kept for years, so this rule arrives with no retention and cannot run until you set one.', 'ubac-cleanup' ),
+				'note'        => __( 'Written by PDF Invoices & Packing Slips for WooCommerce. These are accounting records: in several countries they must be kept for years, so this rule arrives with no retention and cannot run until you set one.', 'dahuconcept-file-cleanup' ),
 			),
 			'quotes'   => array(
-				'label'       => __( 'Quote PDFs', 'ubac-cleanup' ),
+				'label'       => __( 'Quote PDFs', 'dahuconcept-file-cleanup' ),
 				'paths'       => 'wp-content/uploads/yith_ywraq',
 				'extensions'  => array( 'pdf' ),
 				'days'        => '',
 				'recursive'   => true,
 				'enabled'     => false,
-				'note'        => __( 'Written by YITH Request a Quote, in year and month subfolders — hence the recursive scan. A quote that became an order is part of that order\'s history.', 'ubac-cleanup' ),
+				'note'        => __( 'Written by YITH Request a Quote, in year and month subfolders — hence the recursive scan. A quote that became an order is part of that order\'s history.', 'dahuconcept-file-cleanup' ),
 			),
 			'staging'  => array(
-				'label'       => __( 'Staging backups and logs', 'ubac-cleanup' ),
+				'label'       => __( 'Staging backups and logs', 'dahuconcept-file-cleanup' ),
 				'paths'       => "wp-content/uploads/wp-staging/backups\nwp-content/uploads/wp-staging/logs",
 				'extensions'  => array( 'wpstg', 'zip', 'sql', 'log' ),
 				'days'        => 30,
 				'recursive'   => true,
 				'enabled'     => false,
-				'note'        => __( 'Backups and logs left by WP Staging. Only the backups and logs folders: its working folders hold a clone being built, and a rule pointed at those would delete files it is still writing.', 'ubac-cleanup' ),
+				'note'        => __( 'Backups and logs left by WP Staging. Only the backups and logs folders: its working folders hold a clone being built, and a rule pointed at those would delete files it is still writing.', 'dahuconcept-file-cleanup' ),
 			),
 			'logs'     => array(
-				'label'       => __( 'WordPress debug logs', 'ubac-cleanup' ),
+				'label'       => __( 'WordPress debug logs', 'dahuconcept-file-cleanup' ),
 				'paths'       => 'wp-content/uploads/logs',
 				'extensions'  => array( 'log', 'txt' ),
 				'days'        => 30,
 				'recursive'   => false,
 				'enabled'     => false,
-				'note'        => __( 'A folder several plugins use for their own logs. Check what is actually in yours before enabling this: a log is also the only record of what went wrong last week.', 'ubac-cleanup' ),
+				'note'        => __( 'A folder several plugins use for their own logs. Check what is actually in yours before enabling this: a log is also the only record of what went wrong last week.', 'dahuconcept-file-cleanup' ),
 			),
 		);
 

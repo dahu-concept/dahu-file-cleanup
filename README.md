@@ -1,4 +1,4 @@
-# Ubac File Cleanup
+# DahuConcept File Cleanup
 
 A retention policy for the generated files that pile up on a WordPress server:
 named rules with their own folders, extensions and maximum age, a dry run that
